@@ -18,9 +18,8 @@ public class PatientRepository {
         return new ArrayList<>(patients);
     }
 
-    public Patient addPatient(Patient patient) {
+    public void addPatient(Patient patient) {
         patients.add(patient);
-        return patient;
     }
 
     public void update(String email, Patient newPatientData) {
@@ -40,12 +39,9 @@ public class PatientRepository {
         patients.removeIf(patient -> patient.getEmail().equals(email));
     }
 
-    public void save(Patient patient) {
+    public Patient save(Patient patient) {
         addPatient(patient);
-    }
-
-    public List<Patient> getAll() {
-        return getPatients();
+        return patient;
     }
 
     public Optional<Patient> findByEmail(String email) {

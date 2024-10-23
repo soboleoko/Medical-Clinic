@@ -1,6 +1,7 @@
 package com.soboleoko.medicalclinic;
 
 import com.soboleoko.medicalclinic.model.Patient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,27 +9,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PatientService {
 
     private final PatientRepository patientRepository;
 
-    @Autowired
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
 
     public List<Patient> getAllPatients() {
-        return patientRepository.getAll();
+        return patientRepository.getPatients();
     }
 
-    public Optional<Patient> getPatientByEmail(String email) {
-        return patientRepository.findByEmail(email);
+    public Patient getPatientByEmail(String email) {
+        return patientRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Patient with given email does not exist."));
     }
 
     public Patient addPatient(Patient patient) {
-        patientRepository.save(patient);
-        return patient;
-    }
+        return patientRepository.save(patient);    }
 
     public void deletePatientByEmail(String email) {
         patientRepository.deleteByEmail(email);
