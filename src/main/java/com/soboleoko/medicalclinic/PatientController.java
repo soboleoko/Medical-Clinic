@@ -2,9 +2,7 @@ package com.soboleoko.medicalclinic;
 
 import com.soboleoko.medicalclinic.model.Patient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +31,10 @@ public class PatientController {
     }
 
     @DeleteMapping("/patients/{email}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+
     public void deletePatientByEmail(@PathVariable String email) {
-        patientService.deletePatientByEmail(email);
+        boolean deleted = patientService.deletePatientByEmail(email);
     }
 
     @PutMapping("/patients/{email}")

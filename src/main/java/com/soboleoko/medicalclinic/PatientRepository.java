@@ -22,7 +22,7 @@ public class PatientRepository {
         patients.add(patient);
     }
 
-    public void update(String email, Patient newPatientData) {
+    public Optional<Patient> update(String email, Patient newPatientData) {
         Optional<Patient> existingPatient = findByEmail(email);
         if (existingPatient.isPresent()) {
             Patient patient = existingPatient.get();
@@ -33,10 +33,11 @@ public class PatientRepository {
             patient.setPhoneNumber(newPatientData.getPhoneNumber());
             patient.setIdCardNo(newPatientData.getIdCardNo());
         }
+        return existingPatient;
     }
 
-    public void deleteByEmail(String email) {
-        patients.removeIf(patient -> patient.getEmail().equals(email));
+    public boolean deleteByEmail(String email) {
+        return patients.removeIf(patient -> patient.getEmail().equals(email));
     }
 
     public Patient save(Patient patient) {
@@ -49,5 +50,4 @@ public class PatientRepository {
                 .filter(patient -> patient.getEmail().equals(email))
                 .findFirst();
     }
-
 }

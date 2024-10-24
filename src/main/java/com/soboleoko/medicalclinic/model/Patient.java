@@ -2,10 +2,8 @@ package com.soboleoko.medicalclinic.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @AllArgsConstructor
 @Data
