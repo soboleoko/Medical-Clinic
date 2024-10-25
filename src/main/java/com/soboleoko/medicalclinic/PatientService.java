@@ -30,7 +30,10 @@ public class PatientService {
     }
 
     public Patient updatePatient(String email, Patient newPatientData) {
-        patientRepository.update(email, newPatientData).orElseThrow(() ->  new IllegalArgumentException("Patient with given email doesnt exist"));
-        return newPatientData;
+        return patientRepository.update(email, newPatientData).orElseThrow(() ->  new IllegalArgumentException("Patient with given email doesnt exist"));
+    }
+
+    public void updatePassword (String email, String password) {
+        patientRepository.updatePassword(email, password);
     }
 }

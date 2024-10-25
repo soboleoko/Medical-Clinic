@@ -41,4 +41,9 @@ public class PatientController {
     public Patient updatePatient(@PathVariable String email, @RequestBody Patient newPatientData) {
         return patientService.updatePatient(email, newPatientData);
     }
+    @PatchMapping("/patients/{email}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updatePassword(@PathVariable String email, @RequestBody String password) {
+        patientService.updatePassword(email,password);
+    }
 }

@@ -50,4 +50,12 @@ public class PatientRepository {
                 .filter(patient -> patient.getEmail().equals(email))
                 .findFirst();
     }
+
+    public void updatePassword(String email, String password){
+        Optional<Patient> existingPatient = findByEmail(email);
+        if (existingPatient.isPresent()) {
+            Patient patient = existingPatient.get();
+            patient.setPassword(password);
+        }
+    }
 }
