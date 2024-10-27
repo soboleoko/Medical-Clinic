@@ -1,6 +1,8 @@
 package com.soboleoko.medicalclinic;
 
+import com.soboleoko.medicalclinic.mapper.PatientMapper;
 import com.soboleoko.medicalclinic.model.Patient;
+import com.soboleoko.medicalclinic.model.PatientDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,28 +20,29 @@ public class PatientController {
         return patientService.getAllPatients();
     }
 
-    @GetMapping("/{email}")
-    public Patient getPatientByEmail(@PathVariable String email) {
-        return patientService.getPatientByEmail(email);
+    @GetMapping("/patients/{email}")
+    public PatientDTO getPatientByEmail(@PathVariable String email) {
+        PatientMapper patientMapper = new PatientMapper();
+        return patientMapper.patientToDTO(patientService.getPatientByEmail(email));
     }
 
     @PostMapping("/patients")
     @ResponseStatus(HttpStatus.CREATED)
-
-    private Patient addPatient(@RequestBody Patient patient) {
-        return patientService.addPatient(patient);
+    private PatientDTO addPatient(@RequestBody Patient patient) {
+        PatientMapper patientMapper = new PatientMapper();
+        return patientMapper.patientToDTO(patientService.addPatient(patient));
     }
 
     @DeleteMapping("/patients/{email}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-
     public void deletePatientByEmail(@PathVariable String email) {
         boolean deleted = patientService.deletePatientByEmail(email);
     }
 
     @PutMapping("/patients/{email}")
-    public Patient updatePatient(@PathVariable String email, @RequestBody Patient newPatientData) {
-        return patientService.updatePatient(email, newPatientData);
+    public PatientDTO updatePatient(@PathVariable String email, @RequestBody Patient newPatientData) {
+        PatientMapper patientMapper = new PatientMapper();
+        return patientMapper.patientToDTO(patientService.updatePatient(email,newPatientData));
     }
     @PatchMapping("/patients/{email}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
