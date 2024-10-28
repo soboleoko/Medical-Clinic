@@ -16,21 +16,19 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping("/patients")
-    public List<Patient> getAllPatients() {
-        return patientService.getAllPatients();
+    public List<PatientDTO> getAllPatients() {
+        return PatientMapper.patientToDTOList(patientService.getAllPatients());
     }
 
     @GetMapping("/patients/{email}")
     public PatientDTO getPatientByEmail(@PathVariable String email) {
-        PatientMapper patientMapper = new PatientMapper();
-        return patientMapper.patientToDTO(patientService.getPatientByEmail(email));
+        return PatientMapper.patientToDTO(patientService.getPatientByEmail(email));
     }
 
     @PostMapping("/patients")
     @ResponseStatus(HttpStatus.CREATED)
     private PatientDTO addPatient(@RequestBody Patient patient) {
-        PatientMapper patientMapper = new PatientMapper();
-        return patientMapper.patientToDTO(patientService.addPatient(patient));
+        return PatientMapper.patientToDTO(patientService.addPatient(patient));
     }
 
     @DeleteMapping("/patients/{email}")
@@ -41,12 +39,12 @@ public class PatientController {
 
     @PutMapping("/patients/{email}")
     public PatientDTO updatePatient(@PathVariable String email, @RequestBody Patient newPatientData) {
-        PatientMapper patientMapper = new PatientMapper();
-        return patientMapper.patientToDTO(patientService.updatePatient(email,newPatientData));
+        return PatientMapper.patientToDTO(patientService.updatePatient(email, newPatientData));
     }
+
     @PatchMapping("/patients/{email}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassword(@PathVariable String email, @RequestBody String password) {
-        patientService.updatePassword(email,password);
+        patientService.updatePassword(email, password);
     }
 }
