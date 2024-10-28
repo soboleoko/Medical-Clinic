@@ -2,10 +2,12 @@ package com.soboleoko.medicalclinic.mapper;
 
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.PatientDTO;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-public class PatientMapper {
+@NoArgsConstructor
+public final class PatientMapper {
     public static PatientDTO patientToDTO(Patient patient) {
         return new PatientDTO(patient.getEmail(), patient.getIdCardNo(), patient.getFirstName(),
                 patient.getLastName(), patient.getPhoneNumber(), patient.getBirthday());
@@ -19,6 +21,5 @@ public class PatientMapper {
         return patients.stream()
                 .map(PatientMapper::patientToDTO)
                 .toList();
-
     }
 }
