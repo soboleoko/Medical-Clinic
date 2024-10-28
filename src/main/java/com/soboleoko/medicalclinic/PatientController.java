@@ -14,21 +14,22 @@ import java.util.List;
 public class PatientController {
 
     private final PatientService patientService;
+    private final PatientMapper patientMapper;
 
     @GetMapping("/patients")
     public List<PatientDTO> getAllPatients() {
-        return PatientMapper.patientToDTOList(patientService.getAllPatients());
+        return patientMapper.mapToPatientDTOList(patientService.getAllPatients());
     }
 
     @GetMapping("/patients/{email}")
     public PatientDTO getPatientByEmail(@PathVariable String email) {
-        return PatientMapper.patientToDTO(patientService.getPatientByEmail(email));
+        return patientMapper.mapToPatientDTO(patientService.getPatientByEmail(email));
     }
 
     @PostMapping("/patients")
     @ResponseStatus(HttpStatus.CREATED)
     private PatientDTO addPatient(@RequestBody Patient patient) {
-        return PatientMapper.patientToDTO(patientService.addPatient(patient));
+        return patientMapper.mapToPatientDTO(patientService.addPatient(patient));
     }
 
     @DeleteMapping("/patients/{email}")
@@ -39,7 +40,7 @@ public class PatientController {
 
     @PutMapping("/patients/{email}")
     public PatientDTO updatePatient(@PathVariable String email, @RequestBody Patient newPatientData) {
-        return PatientMapper.patientToDTO(patientService.updatePatient(email, newPatientData));
+        return patientMapper.mapToPatientDTO(patientService.updatePatient(email, newPatientData));
     }
 
     @PatchMapping("/patients/{email}")
