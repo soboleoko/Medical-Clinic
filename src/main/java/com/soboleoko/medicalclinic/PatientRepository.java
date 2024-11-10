@@ -1,10 +1,13 @@
 package com.soboleoko.medicalclinic;
 
+import com.soboleoko.medicalclinic.exception.EmailAlreadyExistsException;
 import com.soboleoko.medicalclinic.model.Patient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,13 +16,21 @@ import java.util.Optional;
 public class PatientRepository {
 
     private final List<Patient> patients = new ArrayList<>();
+    private final HashSet<String> emails = new HashSet<>();
 
     public List<Patient> getPatients() {
         return new ArrayList<>(patients);
     }
+    public HashSet<String> getEmails() {
+        return new HashSet<String>(emails);
+    }
 
-    public void addPatient(Patient patient) {
+    public Patient addPatient(Patient patient) {
+        if (!emails.add(patient.getEmail())) {
+            throw new EmailAlreadyExistsException("Pacjent o takim adresie już istnieje", HttpStatus.BAD_REQUEST);
+        }
         patients.add(patient);
+        return patient;
     }
 
     public Optional<Patient> update(String email, Patient newPatientData) {
@@ -31,18 +42,13 @@ public class PatientRepository {
             patient.setFirstName(newPatientData.getFirstName());
             patient.setLastName(newPatientData.getLastName());
             patient.setPhoneNumber(newPatientData.getPhoneNumber());
-            patient.setIdCardNo(newPatientData.getIdCardNo());
         }
         return existingPatient;
     }
 
     public boolean deleteByEmail(String email) {
+         emails.removeIf(removedEmail -> removedEmail.equals(email));
         return patients.removeIf(patient -> patient.getEmail().equals(email));
-    }
-
-    public Patient save(Patient patient) {
-        addPatient(patient);
-        return patient;
     }
 
     public Optional<Patient> findByEmail(String email) {

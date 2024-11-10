@@ -1,5 +1,6 @@
 package com.soboleoko.medicalclinic;
 
+import com.soboleoko.medicalclinic.exception.EmailAlreadyExistsException;
 import com.soboleoko.medicalclinic.exception.PatientNotFoundException;
 import com.soboleoko.medicalclinic.model.Patient;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,10 @@ public class PatientService {
     }
 
     public Patient addPatient(Patient patient) {
-        return patientRepository.save(patient);
+        if (!patientRepository.getEmails().add(patient.getEmail())) {
+            throw new EmailAlreadyExistsException("The email address is used on different account.", HttpStatus.BAD_REQUEST);
+        }
+        return patientRepository.addPatient(patient);
     }
 
     public boolean deletePatientByEmail(String email) {
