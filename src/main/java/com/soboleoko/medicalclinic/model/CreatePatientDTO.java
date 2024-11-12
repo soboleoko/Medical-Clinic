@@ -5,15 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
-
-public class PatientDTO {
+public class CreatePatientDTO {
     @NotBlank(message = "Please provide an email")
     @Email(message = "Wrong email format")
     private String email;
@@ -24,7 +21,7 @@ public class PatientDTO {
     @NotBlank(message = "Please provide a last name")
     private String lastName;
     private String fullName;
-    @NotBlank(message = "Please provide an phone number")
+    @NotBlank(message = "Please provide a phone number")
     private String phoneNumber;
     @NotNull(message = "Please provide a birthday")
     private LocalDate birthday;

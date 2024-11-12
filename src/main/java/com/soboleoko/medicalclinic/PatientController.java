@@ -3,6 +3,7 @@ package com.soboleoko.medicalclinic;
 import com.soboleoko.medicalclinic.mapper.PatientMapper;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.PatientDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,24 +29,22 @@ public class PatientController {
 
     @PostMapping("/patients")
     @ResponseStatus(HttpStatus.CREATED)
-    private PatientDTO addPatient(@RequestBody Patient patient) {
+    private PatientDTO addPatient(@RequestBody @Valid Patient patient) {
         return patientMapper.mapToPatientDTO(patientService.addPatient(patient));
     }
 
     @DeleteMapping("/patients/{email}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePatientByEmail(@PathVariable String email) {
         boolean deleted = patientService.deletePatientByEmail(email);
     }
 
     @PutMapping("/patients/{email}")
-    public PatientDTO updatePatient(@PathVariable String email, @RequestBody Patient newPatientData) {
+    public PatientDTO updatePatient(@PathVariable String email, @RequestBody @Valid Patient newPatientData) {
         return patientMapper.mapToPatientDTO(patientService.updatePatient(email, newPatientData));
     }
 
     @PatchMapping("/patients/{email}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updatePassword(@PathVariable String email, @RequestBody String password) {
+    public void updatePassword(@PathVariable String email, @RequestBody @Valid String password) {
         patientService.updatePassword(email, password);
     }
 }
