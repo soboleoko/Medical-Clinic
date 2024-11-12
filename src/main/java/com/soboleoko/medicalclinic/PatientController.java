@@ -29,8 +29,7 @@ public class PatientController {
 
     @PostMapping("/patients")
     @ResponseStatus(HttpStatus.CREATED)
-    private PatientDTO addPatient(@RequestBody @Valid PatientDTO patientDTO) {
-        Patient patient = patientMapper.mapToPatient(patientDTO);
+    private PatientDTO addPatient(@RequestBody @Valid Patient patient) {
         return patientMapper.mapToPatientDTO(patientService.addPatient(patient));
     }
 
@@ -40,9 +39,8 @@ public class PatientController {
     }
 
     @PutMapping("/patients/{email}")
-    public PatientDTO updatePatient(@PathVariable String email, @RequestBody @Valid PatientDTO newPatientData) {
-        Patient patient = patientMapper.mapToPatient(newPatientData);
-        return patientMapper.mapToPatientDTO(patientService.updatePatient(email, patient));
+    public PatientDTO updatePatient(@PathVariable String email, @RequestBody @Valid Patient newPatientData) {
+        return patientMapper.mapToPatientDTO(patientService.updatePatient(email, newPatientData));
     }
 
     @PatchMapping("/patients/{email}")

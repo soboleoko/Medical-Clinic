@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @ControllerAdvice
-public class PatientExceptionHandler  {
+public class MedicalClinicExceptionHandler {
     @ExceptionHandler({PatientNotFoundException.class})
     public ResponseEntity<ErrorMessage> handlePatientNotFound(PatientNotFoundException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
@@ -24,8 +24,8 @@ public class PatientExceptionHandler  {
         return new ResponseEntity<>(new ErrorMessage("Unknown message"), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({EmailAlreadyExistsException.class})
-    public ResponseEntity<ErrorMessage> handleEmailExistsException(EmailAlreadyExistsException exception) {
+    @ExceptionHandler({PatientAlreadyExistsException.class})
+    public ResponseEntity<ErrorMessage> handlePatientAlreadyExists(PatientAlreadyExistsException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
 
