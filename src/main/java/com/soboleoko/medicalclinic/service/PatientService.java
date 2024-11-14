@@ -1,8 +1,9 @@
-package com.soboleoko.medicalclinic;
+package com.soboleoko.medicalclinic.service;
 
 import com.soboleoko.medicalclinic.exception.PatientAlreadyExistsException;
 import com.soboleoko.medicalclinic.exception.PatientNotFoundException;
 import com.soboleoko.medicalclinic.model.Patient;
+import com.soboleoko.medicalclinic.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class PatientService {
     }
 
     public Patient addPatient(Patient patient) {
-        Optional<Patient> existingPatient =  patientRepository.findByEmail(patient.getEmail());
+        Optional<Patient> existingPatient = patientRepository.findByEmail(patient.getEmail());
         if (existingPatient.isPresent()) {
             throw new PatientAlreadyExistsException("Email is already in use", HttpStatus.BAD_REQUEST);
         }

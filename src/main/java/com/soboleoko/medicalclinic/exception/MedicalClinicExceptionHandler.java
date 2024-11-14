@@ -28,16 +28,10 @@ public class MedicalClinicExceptionHandler {
     public ResponseEntity<ErrorMessage> handlePatientAlreadyExists(PatientAlreadyExistsException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
-
-//    @ExceptionHandler({MethodArgumentNotValidException.class})
-//    public Map<String, String> handleMethodNotValidException(MethodArgumentNotValidException exception) {
-//        HashMap<String, String> errorMap = new HashMap<>();
-//        exception.getBindingResult().getFieldErrors().forEach(error ->{
-//
-//         errorMap.put(error.getField(), error.getDefaultMessage());
-//        });
-//        return errorMap;
-//    }
+    @ExceptionHandler({DoctorNotFoundException.class})
+    public ResponseEntity<ErrorMessage> handleDoctorNorFound(DoctorNotFoundException exception) {
+        return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
+    }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException exception) {
@@ -53,4 +47,3 @@ public class MedicalClinicExceptionHandler {
         return errorResponse;
     }
 }
-

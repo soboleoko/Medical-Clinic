@@ -1,4 +1,4 @@
-package com.soboleoko.medicalclinic;
+package com.soboleoko.medicalclinic.repository;
 
 import com.soboleoko.medicalclinic.model.Patient;
 import lombok.RequiredArgsConstructor;
