@@ -1,6 +1,7 @@
-package com.soboleoko.medicalclinic;
+package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.PatientMapper;
+import com.soboleoko.medicalclinic.service.PatientService;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.PatientDTO;
 import jakarta.validation.Valid;
