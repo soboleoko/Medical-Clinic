@@ -1,7 +1,7 @@
 package com.soboleoko.medicalclinic.controller;
 
+import com.soboleoko.medicalclinic.mapper.PatientMapper;
 import com.soboleoko.medicalclinic.service.PatientService;
-import com.soboleoko.medicalclinic.mapper.MedicalClinicMapper;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.PatientDTO;
 import jakarta.validation.Valid;
@@ -16,7 +16,7 @@ import java.util.List;
 public class PatientController {
 
     private final PatientService patientService;
-    private final MedicalClinicMapper patientMapper;
+    private final PatientMapper patientMapper;
 
     @GetMapping("/patients")
     public List<PatientDTO> getAllPatients() {

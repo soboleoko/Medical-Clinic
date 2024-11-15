@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class DoctorNotFoundException extends RuntimeException {
-    HttpStatus httpStatus;
+    public final HttpStatus httpStatus;
 
     public DoctorNotFoundException(String message, HttpStatus httpStatus) {
         super(message);

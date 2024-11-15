@@ -7,7 +7,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class DoctorDTO {
+public class CreateDoctorDTO {
 
     @NotBlank(message = "Please provide a first name")
     private String firstName;

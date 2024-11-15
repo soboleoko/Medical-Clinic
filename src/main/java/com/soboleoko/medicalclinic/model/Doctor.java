@@ -5,7 +5,6 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-
 public class Doctor {
 
     private String firstName;

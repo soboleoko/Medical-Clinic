@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+    
     public List<Doctor> getDoctors() {
         return doctorRepository.getDoctors();
     }
