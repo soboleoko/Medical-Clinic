@@ -1,7 +1,6 @@
 package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.DoctorMapper;
-import com.soboleoko.medicalclinic.mapper.PatientMapper;
 import com.soboleoko.medicalclinic.model.CreateDoctorDTO;
 import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.DoctorDTO;
@@ -16,7 +15,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class DoctorController {
-    private final PatientMapper patientMapper;
     private final DoctorMapper doctorMapper;
     private final DoctorService doctorService;
 
@@ -24,6 +22,7 @@ public class DoctorController {
     public List<DoctorDTO> getDoctors() {
         return doctorMapper.mapToDoctorDTOList(doctorService.getDoctors());
     }
+
     @GetMapping("/doctors/{email}")
     public DoctorDTO getDoctorByEmail(@PathVariable String email) {
         return doctorMapper.mapToDoctorDTO(doctorService.getDoctorByEmail(email));
@@ -36,7 +35,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/doctors/{email}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDoctor(@PathVariable String email) {
         doctorService.deleteDoctor(email);
     }
