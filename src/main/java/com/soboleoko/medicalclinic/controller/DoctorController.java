@@ -2,7 +2,6 @@ package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.DoctorMapper;
 import com.soboleoko.medicalclinic.model.CreateDoctorDTO;
-import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.DoctorDTO;
 import com.soboleoko.medicalclinic.service.DoctorService;
 import jakarta.validation.Valid;
@@ -30,8 +29,8 @@ public class DoctorController {
 
     @PostMapping("/doctors")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateDoctorDTO addDoctor(@RequestBody @Valid Doctor doctor) {
-        return doctorMapper.mapToCreateDoctorDTO(doctorService.addDoctor(doctor));
+    public CreateDoctorDTO addDoctor(@RequestBody @Valid CreateDoctorDTO doctor) {
+        return doctorMapper.mapToCreateDoctorDTO(doctorService.addDoctor(doctorMapper.mapToDoctor(doctor)));
     }
 
     @DeleteMapping("/doctors/{email}")
@@ -41,7 +40,7 @@ public class DoctorController {
     }
 
     @PutMapping("/doctors/{email}")
-    public CreateDoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid Doctor newDoctorData) {
-        return doctorMapper.mapToCreateDoctorDTO(doctorService.updateDoctor(email, newDoctorData));
+    public CreateDoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid CreateDoctorDTO newDoctorData) {
+        return doctorMapper.mapToCreateDoctorDTO(doctorService.updateDoctor(email,doctorMapper.mapToDoctor(newDoctorData)));
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface DoctorMapper {
-    Doctor mapToDoctor (DoctorDTO doctorDTO);
+    Doctor mapToDoctor (CreateDoctorDTO doctorDTO);
 
     DoctorDTO mapToDoctorDTO (Doctor doctor);
 

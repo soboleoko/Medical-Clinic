@@ -1,5 +1,6 @@
 package com.soboleoko.medicalclinic.mapper;
 
+import com.soboleoko.medicalclinic.model.CreatePatientDTO;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.PatientDTO;
 import org.mapstruct.InheritInverseConfiguration;
@@ -15,7 +16,7 @@ public interface PatientMapper {
     PatientDTO mapToPatientDTO(Patient patient);
 
     @InheritInverseConfiguration(name = "mapToPatientDTO")
-    Patient mapToPatient(PatientDTO patientDTO);
+    Patient mapToPatient(CreatePatientDTO patientDTO);
 
     @Mapping(source = "patient", target = "fullName", qualifiedByName = "connectNames")
     List<PatientDTO> mapToPatientDTOList(List<Patient> patientList);

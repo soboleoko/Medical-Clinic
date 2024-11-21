@@ -1,8 +1,8 @@
 package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.PatientMapper;
+import com.soboleoko.medicalclinic.model.CreatePatientDTO;
 import com.soboleoko.medicalclinic.service.PatientService;
-import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.PatientDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +30,8 @@ public class PatientController {
 
     @PostMapping("/patients")
     @ResponseStatus(HttpStatus.CREATED)
-    private PatientDTO addPatient(@RequestBody @Valid Patient patient) {
-        return patientMapper.mapToPatientDTO(patientService.addPatient(patient));
+    private PatientDTO addPatient(@RequestBody @Valid CreatePatientDTO patient) {
+        return patientMapper.mapToPatientDTO(patientService.addPatient(patientMapper.mapToPatient(patient)));
     }
 
     @DeleteMapping("/patients/{email}")
@@ -40,8 +40,8 @@ public class PatientController {
     }
 
     @PutMapping("/patients/{email}")
-    public PatientDTO updatePatient(@PathVariable String email, @RequestBody @Valid Patient newPatientData) {
-        return patientMapper.mapToPatientDTO(patientService.updatePatient(email, newPatientData));
+    public PatientDTO updatePatient(@PathVariable String email, @RequestBody @Valid CreatePatientDTO newPatientData) {
+        return patientMapper.mapToPatientDTO(patientService.updatePatient(email, patientMapper.mapToPatient(newPatientData)));
     }
 
     @PatchMapping("/patients/{email}")

@@ -66,6 +66,13 @@
 			<version>1.6.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>net.risesoft</groupId>
+			<artifactId>risenet-y9boot-support-file-jpa-repository</artifactId>
+			<version>v9.6.7</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
