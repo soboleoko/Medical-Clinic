@@ -9,41 +9,48 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class PatientService {
 
     private final PatientRepository patientRepository;
 
-    public List<Patient> getAllPatients() {
-        return patientRepository.getPatients();
-    }
-
-    public Patient getPatientByEmail(String email) {
-        return patientRepository.findByEmail(email)
-                .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient with given email does not exist."));
-    }
-
     public Patient addPatient(Patient patient) {
-        Optional<Patient> existingPatient = patientRepository.findByEmail(patient.getEmail());
-        if (existingPatient.isPresent()) {
-            throw new PatientAlreadyExistsException("Email is already in use", HttpStatus.BAD_REQUEST);
+        if (patientRepository.findByEmail(patient.getEmail()).isPresent()) {
+            throw new PatientAlreadyExistsException("Provided email is in use", HttpStatus.BAD_REQUEST);
         }
-        return patientRepository.addPatient(patient);
+        return patientRepository.save(patient);
     }
 
-    public boolean deletePatientByEmail(String email) {
-        return patientRepository.deleteByEmail(email);
+    public List<Patient> getPatients() {
+        return patientRepository.findAll();
     }
 
     public Patient updatePatient(String email, Patient newPatientData) {
-        return patientRepository.update(email, newPatientData)
-                .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient with given email does not exist."));
+        Patient existingPatient = patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+        existingPatient.setBirthday(newPatientData.getBirthday());
+        existingPatient.setEmail(newPatientData.getEmail());
+        existingPatient.setFirstName(newPatientData.getFirstName());
+        existingPatient.setLastName(newPatientData.getLastName());
+        existingPatient.setPhoneNumber(newPatientData.getPhoneNumber());
+        patientRepository.save(existingPatient);
+        return existingPatient;
     }
 
     public void updatePassword(String email, String password) {
-        patientRepository.updatePassword(email, password);
+        Patient existingPatient = patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+        existingPatient.setPassword(password);
+        patientRepository.save(existingPatient);
+    }
+
+    public Patient findByEmail(String email) {
+        return patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+    }
+
+    public void deletePatient(String email) {
+        Patient existingPatient = patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+        patientRepository.delete(existingPatient);
     }
 }
+

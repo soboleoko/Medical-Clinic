@@ -20,12 +20,12 @@ public class PatientController {
 
     @GetMapping("/patients")
     public List<PatientDTO> getAllPatients() {
-        return patientMapper.mapToPatientDTOList(patientService.getAllPatients());
+        return patientMapper.mapToPatientDTOList(patientService.getPatients());
     }
 
     @GetMapping("/patients/{email}")
     public PatientDTO getPatientByEmail(@PathVariable String email) {
-        return patientMapper.mapToPatientDTO(patientService.getPatientByEmail(email));
+        return patientMapper.mapToPatientDTO(patientService.findByEmail(email));
     }
 
     @PostMapping("/patients")
@@ -36,7 +36,7 @@ public class PatientController {
 
     @DeleteMapping("/patients/{email}")
     public void deletePatientByEmail(@PathVariable String email) {
-        boolean deleted = patientService.deletePatientByEmail(email);
+        patientService.deletePatient(email);
     }
 
     @PutMapping("/patients/{email}")

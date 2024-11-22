@@ -24,23 +24,27 @@ public class DoctorController {
 
     @GetMapping("/doctors/{email}")
     public DoctorDTO getDoctorByEmail(@PathVariable String email) {
-        return doctorMapper.mapToDoctorDTO(doctorService.getDoctorByEmail(email));
+        return doctorMapper.mapToDoctorDTO(doctorService.findByEmail(email));
     }
 
     @PostMapping("/doctors")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateDoctorDTO addDoctor(@RequestBody @Valid CreateDoctorDTO doctor) {
-        return doctorMapper.mapToCreateDoctorDTO(doctorService.addDoctor(doctorMapper.mapToDoctor(doctor)));
+    public DoctorDTO addDoctor(@RequestBody @Valid CreateDoctorDTO doctor) {
+        return doctorMapper.mapToDoctorDTO(doctorService.addDoctor(doctorMapper.mapToDoctor(doctor)));
     }
 
     @DeleteMapping("/doctors/{email}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDoctor(@PathVariable String email) {
         doctorService.deleteDoctor(email);
     }
 
     @PutMapping("/doctors/{email}")
-    public CreateDoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid CreateDoctorDTO newDoctorData) {
-        return doctorMapper.mapToCreateDoctorDTO(doctorService.updateDoctor(email,doctorMapper.mapToDoctor(newDoctorData)));
+    public DoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid CreateDoctorDTO newDoctorData) {
+        return doctorMapper.mapToDoctorDTO(doctorService.updateDoctor(email, doctorMapper.mapToDoctor(newDoctorData)));
+    }
+
+    @PatchMapping("doctors/{email}")
+    public void updatePassword(@PathVariable String email, @RequestBody @Valid String password) {
+        doctorService.updatePassword(email, password);
     }
 }
