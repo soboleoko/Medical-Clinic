@@ -25,4 +25,6 @@ public class CreatePatientDTO {
     private String phoneNumber;
     @NotNull(message = "Please provide a birthday")
     private LocalDate birthday;
+    @NotBlank(message = "Please provide a password")
+    private String password;
 }

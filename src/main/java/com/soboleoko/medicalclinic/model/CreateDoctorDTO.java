@@ -18,4 +18,6 @@ public class CreateDoctorDTO {
     @NotBlank(message = "Please provide an email")
     @Email(message = "Wrong email format")
     private String email;
+    @NotBlank(message = "Please provide a password")
+    private String password;
 }

@@ -16,15 +16,15 @@ public class Patient {
     private Long id;
     @Column(name = "Email", length = 100, nullable = false)
     private String email;
-    @Column(name = "Password", length = 100)
+    @Column(name = "Password", length = 100, nullable = false)
     private String password;
-    @Column(name = "ID Card Number", length = 100, nullable = false)
+    @Column(name = "ID_Card_Number", length = 100, nullable = false)
     private String idCardNo;
-    @Column(name = "First name", length = 100, nullable = false)
+    @Column(name = "First_name", length = 100, nullable = false)
     private String firstName;
-    @Column(name = "Last name", length = 100, nullable = false)
+    @Column(name = "Last_name", length = 100, nullable = false)
     private String lastName;
-    @Column(name = "Phone number", length = 100, nullable = false)
+    @Column(name = "Phone_number", length = 100, nullable = false)
     private String phoneNumber;
     @Column(name = "Birthday", length = 100, nullable = false)
     private LocalDate birthday;

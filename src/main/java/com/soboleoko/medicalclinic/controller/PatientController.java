@@ -2,6 +2,7 @@ package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.PatientMapper;
 import com.soboleoko.medicalclinic.model.CreatePatientDTO;
+import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.service.PatientService;
 import com.soboleoko.medicalclinic.model.PatientDTO;
 import jakarta.validation.Valid;
@@ -45,7 +46,7 @@ public class PatientController {
     }
 
     @PatchMapping("/patients/{email}")
-    public void updatePassword(@PathVariable String email, @RequestBody @Valid String password) {
+    public void updatePassword(@PathVariable String email, @RequestBody @Valid UpdatePasswordDTO password) {
         patientService.updatePassword(email, password);
     }
 }

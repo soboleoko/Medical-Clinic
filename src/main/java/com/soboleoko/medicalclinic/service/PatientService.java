@@ -3,6 +3,7 @@ package com.soboleoko.medicalclinic.service;
 import com.soboleoko.medicalclinic.exception.PatientAlreadyExistsException;
 import com.soboleoko.medicalclinic.exception.PatientNotFoundException;
 import com.soboleoko.medicalclinic.model.Patient;
+import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,9 +39,9 @@ public class PatientService {
         return existingPatient;
     }
 
-    public void updatePassword(String email, String password) {
+    public void updatePassword(String email, UpdatePasswordDTO password) {
         Patient existingPatient = patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
-        existingPatient.setPassword(password);
+        existingPatient.setPassword(password.getPassword());
         patientRepository.save(existingPatient);
     }
 
