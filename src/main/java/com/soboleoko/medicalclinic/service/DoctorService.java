@@ -3,6 +3,7 @@ package com.soboleoko.medicalclinic.service;
 import com.soboleoko.medicalclinic.exception.DoctorAlreadyExistsException;
 import com.soboleoko.medicalclinic.exception.DoctorNotFoundException;
 import com.soboleoko.medicalclinic.model.Doctor;
+import com.soboleoko.medicalclinic.model.Institution;
 import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,14 @@ public class DoctorService {
     public void deleteDoctor(String email) {
         Doctor existingDoctor = doctorRepository.findByEmail(email).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
         doctorRepository.delete(existingDoctor);
+    }
+    public Doctor findDoctorById(Long id){
+        return doctorRepository.findById(id).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist",
+                HttpStatus.NOT_FOUND));
+    }
+
+    public Doctor assignDoctorToInstitution(Doctor doctor, Institution institution){
+        doctor.setInstitution(institution);
+        return doctorRepository.save(doctor);
     }
 }

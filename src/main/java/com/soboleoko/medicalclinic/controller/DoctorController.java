@@ -1,10 +1,9 @@
 package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.DoctorMapper;
-import com.soboleoko.medicalclinic.model.CreateDoctorDTO;
-import com.soboleoko.medicalclinic.model.DoctorDTO;
-import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
+import com.soboleoko.medicalclinic.model.*;
 import com.soboleoko.medicalclinic.service.DoctorService;
+import com.soboleoko.medicalclinic.service.InstitutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,7 @@ import java.util.List;
 public class DoctorController {
     private final DoctorMapper doctorMapper;
     private final DoctorService doctorService;
+    private final InstitutionService institutionService;
 
     @GetMapping("/doctors")
     public List<DoctorDTO> getDoctors() {
@@ -47,5 +47,12 @@ public class DoctorController {
     @PatchMapping("doctors/{email}")
     public void updatePassword(@PathVariable String email, @RequestBody @Valid UpdatePasswordDTO password) {
         doctorService.updatePassword(email, password);
+    }
+
+    @PatchMapping("/doctors/{doctorId}/assign/{institutionId}")
+    public DoctorDTO assignDoctorToInstitution(@PathVariable Long doctorId, @PathVariable Long institutionId) {
+        Doctor doctor = doctorService.findDoctorById(doctorId);
+        Institution institution = institutionService.findInstitutionById(institutionId);
+        return doctorMapper.mapToDoctorDTO(doctorService.assignDoctorToInstitution(doctor, institution));
     }
 }

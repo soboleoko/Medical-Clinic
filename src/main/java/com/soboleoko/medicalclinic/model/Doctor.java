@@ -1,10 +1,12 @@
 package com.soboleoko.medicalclinic.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Doctor {
@@ -22,4 +24,8 @@ public class Doctor {
     private String email;
     @Column(name = "Password", nullable = false)
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
 }
