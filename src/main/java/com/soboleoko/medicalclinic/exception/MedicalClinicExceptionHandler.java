@@ -28,8 +28,9 @@ public class MedicalClinicExceptionHandler {
     public ResponseEntity<ErrorMessage> handlePatientAlreadyExists(PatientAlreadyExistsException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
+
     @ExceptionHandler({DoctorNotFoundException.class})
-    public ResponseEntity<ErrorMessage> handleDoctorNorFound(DoctorNotFoundException exception) {
+    public ResponseEntity<ErrorMessage> handleDoctorNotFound(DoctorNotFoundException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
 
@@ -45,5 +46,10 @@ public class MedicalClinicExceptionHandler {
         Map<String, List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors", errors);
         return errorResponse;
+    }
+
+    @ExceptionHandler({DoctorAlreadyExistsException.class})
+    public ResponseEntity<ErrorMessage> handleDoctorAlreadyExists(DoctorAlreadyExistsException exception) {
+        return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
 }

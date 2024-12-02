@@ -1,43 +1,54 @@
 package com.soboleoko.medicalclinic.service;
 
+import com.soboleoko.medicalclinic.exception.DoctorAlreadyExistsException;
 import com.soboleoko.medicalclinic.exception.DoctorNotFoundException;
 import com.soboleoko.medicalclinic.model.Doctor;
+import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
-    
-    public List<Doctor> getDoctors() {
-        return doctorRepository.getDoctors();
-    }
-
-    public Doctor getDoctorByEmail(String email) {
-        return doctorRepository.getDoctorByEmail(email)
-                .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
-    }
 
     public Doctor addDoctor(Doctor doctor) {
-        Optional<Doctor> doctorByEmail = doctorRepository.getDoctorByEmail(doctor.getEmail());
-        if (doctorByEmail.isPresent()) {
-            throw new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND);
+        if (doctorRepository.findByEmail(doctor.getEmail()).isPresent()) {
+            throw new DoctorAlreadyExistsException("Provided email is in use", HttpStatus.BAD_REQUEST);
         }
-        return doctorRepository.addDoctor(doctor);
+        return doctorRepository.save(doctor);
     }
 
-    public void deleteDoctor(String email) {
-        doctorRepository.deleteDoctor(email);
+    public List<Doctor> getDoctors() {
+        return doctorRepository.findAll();
     }
 
     public Doctor updateDoctor(String email, Doctor newDoctorData) {
-        return doctorRepository.updateDoctor(email,newDoctorData)
-                .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
+        Doctor existingDoctor = doctorRepository.findByEmail(email).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
+        existingDoctor.setEmail(newDoctorData.getEmail());
+        existingDoctor.setFirstName(newDoctorData.getFirstName());
+        existingDoctor.setLastName(newDoctorData.getLastName());
+        existingDoctor.setSpecialization(newDoctorData.getSpecialization());
+        doctorRepository.save(existingDoctor);
+        return existingDoctor;
+    }
+
+    public void updatePassword(String email, UpdatePasswordDTO password) {
+        Doctor existingDoctor = doctorRepository.findByEmail(email).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
+        existingDoctor.setPassword(password.getPassword());
+        doctorRepository.save(existingDoctor);
+    }
+
+    public Doctor findByEmail(String email) {
+        return doctorRepository.findByEmail(email).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
+    }
+
+    public void deleteDoctor(String email) {
+        Doctor existingDoctor = doctorRepository.findByEmail(email).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
+        doctorRepository.delete(existingDoctor);
     }
 }

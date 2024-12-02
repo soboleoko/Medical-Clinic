@@ -2,8 +2,8 @@ package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.DoctorMapper;
 import com.soboleoko.medicalclinic.model.CreateDoctorDTO;
-import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.DoctorDTO;
+import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.service.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,23 +25,27 @@ public class DoctorController {
 
     @GetMapping("/doctors/{email}")
     public DoctorDTO getDoctorByEmail(@PathVariable String email) {
-        return doctorMapper.mapToDoctorDTO(doctorService.getDoctorByEmail(email));
+        return doctorMapper.mapToDoctorDTO(doctorService.findByEmail(email));
     }
 
     @PostMapping("/doctors")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateDoctorDTO addDoctor(@RequestBody @Valid Doctor doctor) {
-        return doctorMapper.mapToCreateDoctorDTO(doctorService.addDoctor(doctor));
+    public DoctorDTO addDoctor(@RequestBody @Valid CreateDoctorDTO doctor) {
+        return doctorMapper.mapToDoctorDTO(doctorService.addDoctor(doctorMapper.mapToDoctor(doctor)));
     }
 
     @DeleteMapping("/doctors/{email}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDoctor(@PathVariable String email) {
         doctorService.deleteDoctor(email);
     }
 
     @PutMapping("/doctors/{email}")
-    public CreateDoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid Doctor newDoctorData) {
-        return doctorMapper.mapToCreateDoctorDTO(doctorService.updateDoctor(email, newDoctorData));
+    public DoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid CreateDoctorDTO newDoctorData) {
+        return doctorMapper.mapToDoctorDTO(doctorService.updateDoctor(email, doctorMapper.mapToDoctor(newDoctorData)));
+    }
+
+    @PatchMapping("doctors/{email}")
+    public void updatePassword(@PathVariable String email, @RequestBody @Valid UpdatePasswordDTO password) {
+        doctorService.updatePassword(email, password);
     }
 }

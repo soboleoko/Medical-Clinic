@@ -9,11 +9,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface DoctorMapper {
-    Doctor mapToDoctor (DoctorDTO doctorDTO);
+    Doctor mapToDoctor(CreateDoctorDTO doctorDTO);
 
-    DoctorDTO mapToDoctorDTO (Doctor doctor);
+    DoctorDTO mapToDoctorDTO(Doctor doctor);
 
-    CreateDoctorDTO mapToCreateDoctorDTO (Doctor doctor);
-
-    List<DoctorDTO> mapToDoctorDTOList (List<Doctor> doctors);
+    List<DoctorDTO> mapToDoctorDTOList(List<Doctor> doctors);
 }

@@ -4,11 +4,11 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class PatientAlreadyExistsException extends RuntimeException {
+public class DoctorAlreadyExistsException extends RuntimeException {
 
     public final HttpStatus httpStatus;
 
-    public PatientAlreadyExistsException(String message, HttpStatus httpStatus) {
+    public DoctorAlreadyExistsException(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }
