@@ -1,9 +1,7 @@
 package com.soboleoko.medicalclinic.controller;
 
 import com.soboleoko.medicalclinic.mapper.DoctorMapper;
-import com.soboleoko.medicalclinic.model.CreateDoctorDTO;
-import com.soboleoko.medicalclinic.model.DoctorDTO;
-import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
+import com.soboleoko.medicalclinic.model.*;
 import com.soboleoko.medicalclinic.service.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,41 +9,40 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RequestMapping("/doctors")
 @RestController
 @RequiredArgsConstructor
 public class DoctorController {
     private final DoctorMapper doctorMapper;
     private final DoctorService doctorService;
 
-    @GetMapping("/doctors")
+    @GetMapping
     public List<DoctorDTO> getDoctors() {
         return doctorMapper.mapToDoctorDTOList(doctorService.getDoctors());
     }
-
-    @GetMapping("/doctors/{email}")
+    @GetMapping("/{email}")
     public DoctorDTO getDoctorByEmail(@PathVariable String email) {
         return doctorMapper.mapToDoctorDTO(doctorService.findByEmail(email));
     }
-
-    @PostMapping("/doctors")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DoctorDTO addDoctor(@RequestBody @Valid CreateDoctorDTO doctor) {
         return doctorMapper.mapToDoctorDTO(doctorService.addDoctor(doctorMapper.mapToDoctor(doctor)));
     }
-
-    @DeleteMapping("/doctors/{email}")
+    @DeleteMapping("/{email}")
     public void deleteDoctor(@PathVariable String email) {
         doctorService.deleteDoctor(email);
     }
-
-    @PutMapping("/doctors/{email}")
+    @PutMapping("/{email}")
     public DoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid CreateDoctorDTO newDoctorData) {
         return doctorMapper.mapToDoctorDTO(doctorService.updateDoctor(email, doctorMapper.mapToDoctor(newDoctorData)));
     }
-
-    @PatchMapping("doctors/{email}")
+    @PatchMapping("/{email}")
     public void updatePassword(@PathVariable String email, @RequestBody @Valid UpdatePasswordDTO password) {
         doctorService.updatePassword(email, password);
+    }
+    @PatchMapping("/{doctorId}/institution/{institutionId}/assign")
+    public DoctorDTO assignDoctorToInstitution(@PathVariable Long doctorId, @PathVariable Long institutionId) {
+        return doctorMapper.mapToDoctorDTO(doctorService.assignDoctorToInstitution(doctorId, institutionId));
     }
 }
