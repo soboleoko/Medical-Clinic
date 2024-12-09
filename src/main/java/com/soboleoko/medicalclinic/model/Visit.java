@@ -18,7 +18,9 @@ public class Visit {
     @Column(name = "VISIT_DATE",nullable = false)
     private LocalDateTime dateTime;
     @ManyToOne
+    @JoinColumn(name = "patient_id")
     private Patient patient;
     @ManyToOne
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 }

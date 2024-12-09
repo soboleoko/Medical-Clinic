@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/institution")
+@RequestMapping("/institutions")
 public class InstitutionController {
     private final InstitutionService institutionService;
     private final InstitutionMapper institutionMapper;

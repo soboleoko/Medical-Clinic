@@ -18,7 +18,8 @@ public class InstitutionService {
     }
 
     public Institution findInstitutionById(Long id) {
-        return institutionRepository.findById(id).orElseThrow(() -> new InstitutionNotFoundException("Institution does not exist",
+        return institutionRepository.findById(id)
+                .orElseThrow(() -> new InstitutionNotFoundException("Institution does not exist",
                 HttpStatus.NOT_FOUND));
     }
 }
