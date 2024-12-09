@@ -6,10 +6,7 @@ import com.soboleoko.medicalclinic.model.InstitutionDTO;
 import com.soboleoko.medicalclinic.service.InstitutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +18,10 @@ public class InstitutionController {
     @PostMapping
     public InstitutionDTO addInstitution(@Valid @RequestBody CreateInstitutionDTO institution) {
         return institutionMapper.mapToInstitutionDTO(institutionService.addInstitution(institutionMapper.mapToInstitution(institution)));
+    }
+
+    @PatchMapping("{institutionId}/assign/{doctorId}")
+    public InstitutionDTO assignDoctorToInstitution(@PathVariable Long doctorId, @PathVariable Long institutionId) {
+        return institutionMapper.mapToInstitutionDTO(institutionService.assignDoctorToInstitution(doctorId, institutionId));
     }
 }

@@ -52,14 +52,17 @@ public class MedicalClinicExceptionHandler {
     public ResponseEntity<ErrorMessage> handleDoctorAlreadyExists(DoctorAlreadyExistsException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
+
     @ExceptionHandler({VisitNotAvailableException.class})
     public ResponseEntity<ErrorMessage> handleVisitNotAvailable(VisitNotAvailableException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
+
     @ExceptionHandler({VisitAlreadyBookedException.class})
     public ResponseEntity<ErrorMessage> handleVisitAlreadyBooked(VisitAlreadyBookedException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));
     }
+
     @ExceptionHandler({VisitNotFoundException.class})
     public ResponseEntity<ErrorMessage> handleVisitNotFound(VisitNotFoundException exception) {
         return ResponseEntity.status(exception.getHttpStatus()).body(new ErrorMessage(exception.getMessage()));

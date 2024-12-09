@@ -35,4 +35,3 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private Set<Visit> visits = new HashSet<>();
 }
-

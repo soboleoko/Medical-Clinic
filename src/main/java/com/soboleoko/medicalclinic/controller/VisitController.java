@@ -19,16 +19,16 @@ public class VisitController {
 
     @PostMapping("/{doctorId}")
     public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO visit, @PathVariable Long doctorId) {
-        return visitMapper.mapToVisitDTO(visitService.createVisit(visit,doctorId));
+        return visitMapper.mapToVisitDTO(visitService.createVisit(visit, doctorId));
     }
 
-    @PatchMapping("/{visitId}/book")
+    @PatchMapping("/{visitId}/book/{patientId}")
     public VisitDTO bookVisit(@PathVariable Long visitId, @PathVariable Long patientId) {
         return visitMapper.mapToVisitDTO(visitService.bookVisit(visitId, patientId));
     }
 
     @GetMapping("/patients/{patientId}")
-    public List<VisitDTO> getPatientVisits (@PathVariable Long patientId) {
+    public List<VisitDTO> getPatientVisits(@PathVariable Long patientId) {
         return visitMapper.mapToVisitListDTO(visitService.findPatientVisits(patientId));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RequestMapping("/doctors")
 @RestController
 @RequiredArgsConstructor
@@ -20,29 +21,30 @@ public class DoctorController {
     public List<DoctorDTO> getDoctors() {
         return doctorMapper.mapToDoctorDTOList(doctorService.getDoctors());
     }
+
     @GetMapping("/{email}")
     public DoctorDTO getDoctorByEmail(@PathVariable String email) {
         return doctorMapper.mapToDoctorDTO(doctorService.findByEmail(email));
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DoctorDTO addDoctor(@RequestBody @Valid CreateDoctorDTO doctor) {
         return doctorMapper.mapToDoctorDTO(doctorService.addDoctor(doctorMapper.mapToDoctor(doctor)));
     }
+
     @DeleteMapping("/{email}")
     public void deleteDoctor(@PathVariable String email) {
         doctorService.deleteDoctor(email);
     }
+
     @PutMapping("/{email}")
     public DoctorDTO updateDoctor(@PathVariable String email, @RequestBody @Valid CreateDoctorDTO newDoctorData) {
         return doctorMapper.mapToDoctorDTO(doctorService.updateDoctor(email, doctorMapper.mapToDoctor(newDoctorData)));
     }
+
     @PatchMapping("/{email}")
     public void updatePassword(@PathVariable String email, @RequestBody @Valid UpdatePasswordDTO password) {
         doctorService.updatePassword(email, password);
-    }
-    @PatchMapping("/{doctorId}/institution/{institutionId}/assign")
-    public DoctorDTO assignDoctorToInstitution(@PathVariable Long doctorId, @PathVariable Long institutionId) {
-        return doctorMapper.mapToDoctorDTO(doctorService.assignDoctorToInstitution(doctorId, institutionId));
     }
 }
