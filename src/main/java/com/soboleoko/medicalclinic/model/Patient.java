@@ -1,12 +1,16 @@
 package com.soboleoko.medicalclinic.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 public class Patient {
@@ -28,5 +32,7 @@ public class Patient {
     private String phoneNumber;
     @Column(name = "Birthday", length = 100, nullable = false)
     private LocalDate birthday;
+    @OneToMany(mappedBy = "patient")
+    private Set<Visit> visits = new HashSet<>();
 }
 

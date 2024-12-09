@@ -29,7 +29,8 @@ public class PatientService {
     }
 
     public Patient updatePatient(String email, Patient newPatientData) {
-        Patient existingPatient = patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+        Patient existingPatient = patientRepository.findByEmail(email)
+                .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
         existingPatient.setBirthday(newPatientData.getBirthday());
         existingPatient.setEmail(newPatientData.getEmail());
         existingPatient.setFirstName(newPatientData.getFirstName());
@@ -40,17 +41,20 @@ public class PatientService {
     }
 
     public void updatePassword(String email, UpdatePasswordDTO password) {
-        Patient existingPatient = patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+        Patient existingPatient = patientRepository.findByEmail(email)
+                .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
         existingPatient.setPassword(password.getPassword());
         patientRepository.save(existingPatient);
     }
 
     public Patient findByEmail(String email) {
-        return patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+        return patientRepository.findByEmail(email)
+                .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
     }
 
     public void deletePatient(String email) {
-        Patient existingPatient = patientRepository.findByEmail(email).orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
+        Patient existingPatient = patientRepository.findByEmail(email)
+                .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
         patientRepository.delete(existingPatient);
     }
 }

@@ -1,10 +1,15 @@
 package com.soboleoko.medicalclinic.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Doctor {
@@ -22,4 +27,10 @@ public class Doctor {
     private String email;
     @Column(name = "Password", nullable = false)
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
+    @OneToMany(mappedBy = "doctor")
+    private Set<Visit> visits = new HashSet<>();
 }
