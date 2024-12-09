@@ -58,4 +58,3 @@ public class PatientService {
         patientRepository.delete(existingPatient);
     }
 }
-

@@ -28,9 +28,8 @@ public class Doctor {
     @Column(name = "Password", nullable = false)
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "institution_id")
-    private Institution institution;
+    @ManyToMany(mappedBy = "doctors")
+    private Set<Institution> institutions = new HashSet<>();
     @OneToMany(mappedBy = "doctor")
     private Set<Visit> visits = new HashSet<>();
 }

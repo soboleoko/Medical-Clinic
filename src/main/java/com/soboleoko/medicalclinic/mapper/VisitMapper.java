@@ -9,5 +9,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface VisitMapper {
     VisitDTO mapToVisitDTO(Visit visit);
+
     List<VisitDTO> mapToVisitListDTO(List<Visit> visitList);
 }
