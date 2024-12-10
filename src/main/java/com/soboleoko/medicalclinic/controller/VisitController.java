@@ -22,8 +22,8 @@ public class VisitController {
         return visitMapper.mapToVisitDTO(visitService.createVisit(visit, doctorId));
     }
 
-    @PatchMapping("/{visitId}/book/{patientId}")
-    public VisitDTO bookVisit(@PathVariable Long visitId, @PathVariable Long patientId) {
+    @PatchMapping("/{visitId}/book")
+    public VisitDTO bookVisit(@PathVariable Long visitId, @RequestParam Long patientId) {
         return visitMapper.mapToVisitDTO(visitService.bookVisit(visitId, patientId));
     }
 

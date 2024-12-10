@@ -5,7 +5,6 @@ import com.soboleoko.medicalclinic.exception.DoctorNotFoundException;
 import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
-import com.soboleoko.medicalclinic.repository.InstitutionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
