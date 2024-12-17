@@ -5,6 +5,7 @@ import com.soboleoko.medicalclinic.exception.DoctorNotFoundException;
 import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
-
+    @Transactional
     public Doctor addDoctor(Doctor doctor) {
         if (doctorRepository.findByEmail(doctor.getEmail()).isPresent()) {
             throw new DoctorAlreadyExistsException("Provided email is in use", HttpStatus.BAD_REQUEST);
         }
-        return doctorRepository.save(doctor);
+        return doctorRepository.save(doctor );
     }
 
     public List<Doctor> getDoctors() {
         return doctorRepository.findAll();
     }
-
+    @Transactional
     public Doctor updateDoctor(String email, Doctor newDoctorData) {
         Doctor existingDoctor = doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
@@ -37,19 +38,18 @@ public class DoctorService {
         doctorRepository.save(existingDoctor);
         return existingDoctor;
     }
-
+    @Transactional
     public void updatePassword(String email, UpdatePasswordDTO password) {
         Doctor existingDoctor = doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
         existingDoctor.setPassword(password.getPassword());
-        doctorRepository.save(existingDoctor);
     }
 
     public Doctor findByEmail(String email) {
         return doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
     }
-
+    @Transactional
     public void deleteDoctor(String email) {
         Doctor existingDoctor = doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));

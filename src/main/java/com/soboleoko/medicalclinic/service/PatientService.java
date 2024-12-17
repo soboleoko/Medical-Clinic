@@ -5,6 +5,7 @@ import com.soboleoko.medicalclinic.exception.PatientNotFoundException;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.PatientRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.List;
 public class PatientService {
 
     private final PatientRepository patientRepository;
-
+    @Transactional
     public Patient addPatient(Patient patient) {
         if (patientRepository.findByEmail(patient.getEmail()).isPresent()) {
             throw new PatientAlreadyExistsException("Provided email is in use", HttpStatus.BAD_REQUEST);
@@ -28,6 +29,7 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
+    @Transactional
     public Patient updatePatient(String email, Patient newPatientData) {
         Patient existingPatient = patientRepository.findByEmail(email)
                 .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
@@ -39,7 +41,7 @@ public class PatientService {
         patientRepository.save(existingPatient);
         return existingPatient;
     }
-
+    @Transactional
     public void updatePassword(String email, UpdatePasswordDTO password) {
         Patient existingPatient = patientRepository.findByEmail(email)
                 .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
@@ -51,7 +53,7 @@ public class PatientService {
         return patientRepository.findByEmail(email)
                 .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
     }
-
+    @Transactional
     public void deletePatient(String email) {
         Patient existingPatient = patientRepository.findByEmail(email)
                 .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));

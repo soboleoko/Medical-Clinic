@@ -8,6 +8,7 @@ import com.soboleoko.medicalclinic.model.Visit;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
 import com.soboleoko.medicalclinic.repository.PatientRepository;
 import com.soboleoko.medicalclinic.repository.VisitRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class VisitService {
     private final VisitRepository visitRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
-
+    @Transactional
     public Visit createVisit(CreateVisitDTO createVisitDTO,Long doctorId) {
         Visit visit = new Visit();
         visit.setDateTime(createVisitDTO.getDateTime());
@@ -37,7 +38,7 @@ public class VisitService {
         }
         return visitRepository.save(visit);
     }
-
+    @Transactional
     public Visit bookVisit(Long patientId, Long visitId) {
         Visit visitById = visitRepository.findById(visitId)
                 .orElseThrow(() -> new VisitNotFoundException("Visit does not exist", HttpStatus.NOT_FOUND));
@@ -50,7 +51,7 @@ public class VisitService {
         if (visitById.getDateTime().isBefore(LocalDateTime.now())) {
             throw new VisitNotAvailableException("Booking in past is not allowed", HttpStatus.BAD_REQUEST);
         }
-        return visitRepository.save(visitById);
+        return visitById;
     }
 
     public List<Visit> findPatientVisits(Long patientId) {
