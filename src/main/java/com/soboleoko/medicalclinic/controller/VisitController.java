@@ -6,8 +6,10 @@ import com.soboleoko.medicalclinic.model.VisitDTO;
 import com.soboleoko.medicalclinic.service.VisitService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -30,5 +32,11 @@ public class VisitController {
     @GetMapping("/patients/{patientId}")
     public List<VisitDTO> getPatientVisits(@PathVariable Long patientId) {
         return visitMapper.mapToVisitListDTO(visitService.findPatientVisits(patientId));
+    }
+
+    @GetMapping("/check")
+    public String checkIfAvailable(@RequestParam Long doctorId, @RequestParam LocalDateTime startDate,
+                                   @RequestParam LocalDateTime endDate) {
+        return visitService.checkAvailability(doctorId, startDate, endDate);
     }
 }
