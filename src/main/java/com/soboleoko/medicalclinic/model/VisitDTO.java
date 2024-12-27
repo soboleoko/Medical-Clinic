@@ -10,5 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class VisitDTO {
-    private LocalDateTime dateTime;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 }
