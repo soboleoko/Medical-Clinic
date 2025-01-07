@@ -16,17 +16,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+
     @Transactional
     public Doctor addDoctor(Doctor doctor) {
         if (doctorRepository.findByEmail(doctor.getEmail()).isPresent()) {
             throw new DoctorAlreadyExistsException("Provided email is in use", HttpStatus.BAD_REQUEST);
         }
-        return doctorRepository.save(doctor );
+        return doctorRepository.save(doctor);
     }
 
     public List<Doctor> getDoctors() {
         return doctorRepository.findAll();
     }
+
     @Transactional
     public Doctor updateDoctor(String email, Doctor newDoctorData) {
         Doctor existingDoctor = doctorRepository.findByEmail(email)
@@ -38,6 +40,7 @@ public class DoctorService {
         doctorRepository.save(existingDoctor);
         return existingDoctor;
     }
+
     @Transactional
     public void updatePassword(String email, UpdatePasswordDTO password) {
         Doctor existingDoctor = doctorRepository.findByEmail(email)
@@ -49,15 +52,11 @@ public class DoctorService {
         return doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
     }
+
     @Transactional
     public void deleteDoctor(String email) {
         Doctor existingDoctor = doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
         doctorRepository.delete(existingDoctor);
-    }
-
-    public Doctor findDoctorById(Long id) {
-        return doctorRepository.findById(id)
-                .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
     }
 }

@@ -1,7 +1,6 @@
 package com.soboleoko.medicalclinic.service;
 
 import com.soboleoko.medicalclinic.exception.*;
-import com.soboleoko.medicalclinic.model.CreateVisitDTO;
 import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.Visit;
@@ -24,15 +23,15 @@ public class VisitService {
     private final DoctorRepository doctorRepository;
 
     @Transactional
-    public Visit createVisit(CreateVisitDTO createVisitDTO, Long doctorId) {
+    public Visit createVisit(Visit createVisitDTO, Long doctorId) {
         Visit visit = new Visit();
         visit.setStartDate(createVisitDTO.getStartDate());
         visit.setEndDate(createVisitDTO.getEndDate());
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
         visit.setDoctor(doctor);
-        if (createVisitDTO.getPatientId() != null) {
-            Patient patient = patientRepository.findById(createVisitDTO.getPatientId())
+        if (createVisitDTO.getPatient() != null) {
+            Patient patient = patientRepository.findById(createVisitDTO.getPatient().getId())
                     .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
             visit.setPatient(patient);
         } else {

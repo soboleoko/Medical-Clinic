@@ -17,16 +17,12 @@ public class InstitutionService {
 
     private final InstitutionRepository institutionRepository;
     private final DoctorRepository doctorRepository;
+
     @Transactional
     public Institution addInstitution(Institution institution) {
         return institutionRepository.save(institution);
     }
 
-    public Institution findInstitutionById(Long id) {
-        return institutionRepository.findById(id)
-                .orElseThrow(() -> new InstitutionNotFoundException("Institution does not exist",
-                        HttpStatus.NOT_FOUND));
-    }
     @Transactional
     public Institution assignDoctorToInstitution(Long doctorID, Long institutionID) {
         Doctor doctor = doctorRepository.findById(doctorID)
