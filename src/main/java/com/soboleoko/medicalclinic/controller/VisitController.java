@@ -6,7 +6,6 @@ import com.soboleoko.medicalclinic.model.VisitDTO;
 import com.soboleoko.medicalclinic.service.VisitService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -21,7 +20,7 @@ public class VisitController {
 
     @PostMapping("/{doctorId}")
     public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO visit, @PathVariable Long doctorId) {
-        return visitMapper.mapToVisitDTO(visitService.createVisit(visit, doctorId));
+        return visitMapper.mapToVisitDTO(visitService.createVisit(visitMapper.mapToVisit(visit), doctorId));
     }
 
     @PatchMapping("/{visitId}/book")
