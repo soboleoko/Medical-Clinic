@@ -19,4 +19,6 @@ public class CreateVisitDTO {
     @NotNull(message = "Please provide a correct date and time")
     private LocalDateTime endDate;
     private Long patientId;
+    @NotNull
+    private Long doctorId;
 }

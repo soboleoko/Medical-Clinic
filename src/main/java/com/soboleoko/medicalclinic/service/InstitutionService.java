@@ -30,6 +30,6 @@ public class InstitutionService {
         Institution institution = institutionRepository.findById(institutionID)
                 .orElseThrow(() -> new InstitutionNotFoundException("Institution does not exist", HttpStatus.BAD_REQUEST));
         institution.getDoctors().add(doctor);
-        return institution;
+        return institutionRepository.save(institution);
     }
 }

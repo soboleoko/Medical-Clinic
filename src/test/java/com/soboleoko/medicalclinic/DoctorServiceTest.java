@@ -2,8 +2,6 @@ package com.soboleoko.medicalclinic;
 
 import com.soboleoko.medicalclinic.exception.DoctorAlreadyExistsException;
 import com.soboleoko.medicalclinic.exception.DoctorNotFoundException;
-import com.soboleoko.medicalclinic.mapper.DoctorMapper;
-import com.soboleoko.medicalclinic.model.CreateDoctorDTO;
 import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
@@ -23,22 +21,18 @@ import static org.mockito.Mockito.when;
 
 public class DoctorServiceTest {
     public DoctorRepository doctorRepository;
-    public DoctorMapper doctorMapper;
     public DoctorService doctorService;
 
     @BeforeEach
     public void setUp() {
         this.doctorRepository = Mockito.mock(DoctorRepository.class);
-        this.doctorMapper = Mockito.mock(DoctorMapper.class);
         this.doctorService = new DoctorService(doctorRepository);
     }
 
     @Test
     public void addDoctor_successfulCreate_doctorReturned() {
         //given
-        CreateDoctorDTO doctor = new CreateDoctorDTO("newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword");
         Doctor mappedDoctor = new Doctor(null, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        when(doctorMapper.mapToDoctor(doctor)).thenReturn(mappedDoctor);
         when(doctorRepository.findByEmail("newEmail@gmail.com")).thenReturn(Optional.empty());
         when(doctorRepository.save(mappedDoctor)).thenReturn(mappedDoctor);
         //when
@@ -56,9 +50,7 @@ public class DoctorServiceTest {
     @Test
     public void addDoctor_throwDoctorNotFoundException_exceptionThrown() {
         //given
-        CreateDoctorDTO doctor = new CreateDoctorDTO("newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword");
         Doctor mappedDoctor = new Doctor(null, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        when(doctorMapper.mapToDoctor(doctor)).thenReturn(mappedDoctor);
         when(doctorRepository.findByEmail("newEmail@gmail.com")).thenReturn(Optional.of(mappedDoctor));
         //when
         DoctorAlreadyExistsException result = Assertions.assertThrows(DoctorAlreadyExistsException.class, () -> doctorService.addDoctor(mappedDoctor));
@@ -70,8 +62,8 @@ public class DoctorServiceTest {
     @Test
     public void getDoctors_successfulGet_returnPatients() {
         //given
-        Doctor doctor = new Doctor(null, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        Doctor doctor1 = new Doctor(null, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
+        Doctor doctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
+        Doctor doctor1 = new Doctor(2L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         when(doctorRepository.findAll()).thenReturn(List.of(doctor, doctor1));
         //when
         List<Doctor> doctors = doctorService.getDoctors();
@@ -82,9 +74,7 @@ public class DoctorServiceTest {
     @Test
     public void updateDoctor_successfulPut_returnUpdatedPatient() {
         //given
-        CreateDoctorDTO doctor = new CreateDoctorDTO("newerFirstName", "newerLastName", "newerSpecialization", "newerEmail@gmail.com", "newPassword");
-        Doctor mappedDoctor = new Doctor(null, "newerFirstName", "newerLastName", "newerSpecialization", "newerEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        when(doctorMapper.mapToDoctor(doctor)).thenReturn(mappedDoctor);
+        Doctor mappedDoctor = new Doctor(1L, "newerFirstName", "newerLastName", "newerSpecialization", "newerEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         when(doctorRepository.findByEmail("newEmail@gmail.com")).thenReturn(Optional.of(mappedDoctor));
         when(doctorRepository.save(mappedDoctor)).thenReturn(mappedDoctor);
         //when
@@ -102,9 +92,7 @@ public class DoctorServiceTest {
     @Test
     public void updateDoctor_throwDoctorDoesNotExist_exceptionThrown() {
         //given
-        CreateDoctorDTO doctor = new CreateDoctorDTO("newerFirstName", "newerLastName", "newerSpecialization", "newerEmail@gmail.com", "newPassword");
-        Doctor mappedDoctor = new Doctor(null, "newerFirstName", "newerLastName", "newerSpecialization", "newerEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        when(doctorMapper.mapToDoctor(doctor)).thenReturn(mappedDoctor);
+        Doctor mappedDoctor = new Doctor(1L, "newerFirstName", "newerLastName", "newerSpecialization", "newerEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         when(doctorRepository.findByEmail("newEmail@gmail.com")).thenReturn(Optional.empty());
         //when
         DoctorNotFoundException result = Assertions.assertThrows(DoctorNotFoundException.class, () -> doctorService.updateDoctor("newEmail@gmail.com", mappedDoctor));
@@ -117,14 +105,14 @@ public class DoctorServiceTest {
     public void updatePassword_successfulPatch_passwordUpdated() {
         //given
         UpdatePasswordDTO newerPassword = new UpdatePasswordDTO("newerPassword");
-        Doctor mappedDoctor = new Doctor(null, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
+        Doctor mappedDoctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         when(doctorRepository.findByEmail("newEmail@gmail.com")).thenReturn(Optional.of(mappedDoctor));
-//        when(doctorRepository.save(mappedDoctor)).thenReturn(mappedDoctor);
+        when(doctorRepository.save(mappedDoctor)).thenReturn(mappedDoctor);
         //when
         doctorService.updatePassword("newEmail@gmail.com", newerPassword);
         //then
         Assertions.assertEquals("newerPassword", mappedDoctor.getPassword());
-//        verify(doctorRepository).save(mappedDoctor);
+        verify(doctorRepository).save(mappedDoctor);
     }
 
     @Test
@@ -142,9 +130,7 @@ public class DoctorServiceTest {
     @Test
     public void findByEmail_successfulGet_returnPatient() {
         //given
-        CreateDoctorDTO doctor = new CreateDoctorDTO("newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword");
-        Doctor mappedDoctor = new Doctor(null, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        when(doctorMapper.mapToDoctor(doctor)).thenReturn(mappedDoctor);
+        Doctor mappedDoctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         when(doctorRepository.findByEmail("newEmail@gmail.com")).thenReturn(Optional.of(mappedDoctor));
         //when
         Doctor result = doctorService.findByEmail("newEmail@gmail.com");
@@ -172,7 +158,7 @@ public class DoctorServiceTest {
     @Test
     public void deleteDoctor_successfulDelete_doctorDeleted() {
         //given
-        Doctor doctor = new Doctor(null, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
+        Doctor doctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         when(doctorRepository.findByEmail("newEmail@gmail.com")).thenReturn(Optional.of(doctor));
         //when
         doctorService.deleteDoctor("newEmail@gmail.com");

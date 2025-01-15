@@ -6,6 +6,7 @@ import com.soboleoko.medicalclinic.model.InstitutionDTO;
 import com.soboleoko.medicalclinic.service.InstitutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class InstitutionController {
     private final InstitutionService institutionService;
     private final InstitutionMapper institutionMapper;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public InstitutionDTO addInstitution(@Valid @RequestBody CreateInstitutionDTO institution) {
         return institutionMapper.mapToInstitutionDTO(institutionService.addInstitution(institutionMapper.mapToInstitution(institution)));

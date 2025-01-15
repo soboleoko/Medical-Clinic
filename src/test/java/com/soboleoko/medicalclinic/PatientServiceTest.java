@@ -2,8 +2,6 @@ package com.soboleoko.medicalclinic;
 
 import com.soboleoko.medicalclinic.exception.PatientAlreadyExistsException;
 import com.soboleoko.medicalclinic.exception.PatientNotFoundException;
-import com.soboleoko.medicalclinic.mapper.PatientMapper;
-import com.soboleoko.medicalclinic.model.CreatePatientDTO;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.PatientRepository;
@@ -25,25 +23,20 @@ import static org.mockito.Mockito.when;
 public class PatientServiceTest {
     private PatientRepository patientRepository;
     private PatientService patientService;
-    private PatientMapper patientMapper;
 
     @BeforeEach
     void setUp() {
         this.patientRepository = Mockito.mock(PatientRepository.class);
         this.patientService = new PatientService(patientRepository);
-        this.patientMapper = Mockito.mock(PatientMapper.class);
     }
 
     // metodaKtoraTestuje_przypadekTestowy_spodziewanyRezultat
     @Test
     public void addPatient_successfulCreate_patientReturn() {
         //given
-        CreatePatientDTO patient = new CreatePatientDTO("asd@gmail.com", "newIdCardNo", "newFirstName",
-                "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29), "newPassword");
         Patient mappedPatient = new Patient(null, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
         //when(patientRepository.findByEmail("asd@email.com")).thenReturn(patient);
-        when(patientMapper.mapToPatient(patient)).thenReturn(mappedPatient);
         when(patientRepository.findByEmail("asd@gmail.com")).thenReturn(Optional.empty());
 //        when(patientRepository.save(patient)).thenReturn(patient);
         when(patientRepository.save(mappedPatient)).thenReturn(mappedPatient);
@@ -63,11 +56,8 @@ public class PatientServiceTest {
     @Test
     public void addPatient_throwPatientAlreadyExistsException_exceptionThrown() {
         //given
-        CreatePatientDTO patient = new CreatePatientDTO("asd@gmail.com", "newIdCardNo", "newFirstName",
-                "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29), "newPassword");
         Patient mappedPatient = new Patient(null, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
-        when(patientMapper.mapToPatient(patient)).thenReturn(mappedPatient);
         when(patientRepository.findByEmail("asd@gmail.com")).thenReturn(Optional.of(mappedPatient));
         //when
         PatientAlreadyExistsException result = Assertions.assertThrows(PatientAlreadyExistsException.class, () -> patientService.addPatient(mappedPatient));
@@ -79,9 +69,9 @@ public class PatientServiceTest {
     @Test
     public void getPatients_successfulGet_patientsReturn() {
         //given
-        Patient mappedPatient = new Patient(null, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
+        Patient mappedPatient = new Patient(1L, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
-        Patient mappedPatient1 = new Patient(null, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(2000, 12, 29),
+        Patient mappedPatient1 = new Patient(2L, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(2000, 12, 29),
                 new HashSet<>());
         when(patientRepository.findAll()).thenReturn(List.of(mappedPatient, mappedPatient1));
         //when
@@ -93,9 +83,7 @@ public class PatientServiceTest {
     @Test
     public void updatePatient_successfulPut_returnUpdatedPatient() {
         //given
-        CreatePatientDTO patient = new CreatePatientDTO("asd123@gmail.com", "newerIdCardNo", "newerFirstName", "newerLastName", "newerPhoneNumber", LocalDate.of(2000, 12, 29), "newPassword");
-        Patient mappedPatient = new Patient(null, "asd123@gmail.com", "newPassword", "newerIdCardNo", "newerFirstName", "newerLastName", "newerPhoneNumber", LocalDate.of(2000, 12, 29), new HashSet<>());
-        when(patientMapper.mapToPatient(patient)).thenReturn(mappedPatient);
+        Patient mappedPatient = new Patient(1L, "asd123@gmail.com", "newPassword", "newerIdCardNo", "newerFirstName", "newerLastName", "newerPhoneNumber", LocalDate.of(2000, 12, 29), new HashSet<>());
         when(patientRepository.findByEmail("asd@gmail.com")).thenReturn(Optional.of(mappedPatient));
         when(patientRepository.save(mappedPatient)).thenReturn(mappedPatient);
         //when
@@ -114,9 +102,7 @@ public class PatientServiceTest {
     @Test
     public void updatePatient_throwPatientNotFoundException_exceptionThrown() {
         //given
-        CreatePatientDTO patient = new CreatePatientDTO("asd123@gmail.com", "newerIdCardNo", "newerFirstName", "newerLastName", "newerPhoneNumber", LocalDate.of(2000, 12, 29), "newPassword");
-        Patient mappedPatient = new Patient(null, "asd123@gmail.com", "newPassword", "newerIdCardNo", "newerFirstName", "newerLastName", "newerPhoneNumber", LocalDate.of(2000, 12, 29), new HashSet<>());
-        when(patientMapper.mapToPatient(patient)).thenReturn(mappedPatient);
+        Patient mappedPatient = new Patient(1L, "asd123@gmail.com", "newPassword", "newerIdCardNo", "newerFirstName", "newerLastName", "newerPhoneNumber", LocalDate.of(2000, 12, 29), new HashSet<>());
         when(patientRepository.findByEmail("asd@gmail.com")).thenReturn(Optional.empty());
         //when
         PatientNotFoundException result = Assertions.assertThrows(PatientNotFoundException.class, () -> patientService.updatePatient("asd@gmail.com", mappedPatient));
@@ -129,7 +115,7 @@ public class PatientServiceTest {
     public void updatePassword_successfulPatch_passwordUpdated() {
         //given
         UpdatePasswordDTO newerPassword = new UpdatePasswordDTO("newerPassword");
-        Patient mappedPatient = new Patient(null, "asd@gmail.com", "newerPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29), new HashSet<>());
+        Patient mappedPatient = new Patient(1L, "asd@gmail.com", "newerPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29), new HashSet<>());
         when(patientRepository.findByEmail("asd@gmail.com")).thenReturn(Optional.of(mappedPatient));
         when(patientRepository.save(mappedPatient)).thenReturn(mappedPatient);
         //when
@@ -154,11 +140,8 @@ public class PatientServiceTest {
     @Test
     public void findByEmail_successfulGet_returnPatient() {
         //given
-        CreatePatientDTO patient = new CreatePatientDTO("asd@gmail.com", "newIdCardNo", "newFirstName",
-                "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29), "newPassword");
-        Patient mappedPatient = new Patient(null, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
+        Patient mappedPatient = new Patient(1L, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
-        when(patientMapper.mapToPatient(patient)).thenReturn(mappedPatient);
         when(patientRepository.findByEmail("asd@gmail.com")).thenReturn(Optional.of(mappedPatient));
         //when
         Patient foundPatient = patientService.findByEmail("asd@gmail.com");
@@ -187,7 +170,7 @@ public class PatientServiceTest {
     @Test
     public void deletePatient_successfulDelete_patientDeleted() {
         //when
-        Patient patient = new Patient(null, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
+        Patient patient = new Patient(1L, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
         when(patientRepository.findByEmail("asd@gmail.com")).thenReturn(Optional.of(patient));
         //when

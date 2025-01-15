@@ -42,10 +42,11 @@ public class DoctorService {
     }
 
     @Transactional
-    public void updatePassword(String email, UpdatePasswordDTO password) {
+    public Doctor updatePassword(String email, UpdatePasswordDTO password) {
         Doctor existingDoctor = doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
         existingDoctor.setPassword(password.getPassword());
+        return doctorRepository.save(existingDoctor);
     }
 
     public Doctor findByEmail(String email) {

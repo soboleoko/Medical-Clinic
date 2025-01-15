@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 public class PatientDTO {
+    private long id;
     private String email;
     private String idCardNo;
     private String firstName;
