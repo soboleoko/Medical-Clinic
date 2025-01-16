@@ -173,8 +173,4 @@ public class VisitServiceTest {
         //then
         Assertions.assertEquals(1, patientVisits.size());
     }
-
-//    @Test
-//    public void checkAvailability_successfulGet_informationReturned
-//
 }

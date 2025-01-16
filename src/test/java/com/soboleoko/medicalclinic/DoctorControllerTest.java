@@ -97,18 +97,18 @@ public class DoctorControllerTest {
     @Test
     public void updatePassword_successfulPatch_passwordUpdated() throws Exception {
         UpdatePasswordDTO newPassword = new UpdatePasswordDTO("newerPassword");
-        Doctor updatedDoctor = new Doctor(null, "newerFirstName", "newerLastName", "newerSpecialization", "newerEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        Mockito.when(doctorService.updatePassword(updatedDoctor.getEmail(), newPassword)).thenReturn(updatedDoctor);
         mockMvc.perform(MockMvcRequestBuilders.patch("/doctors/{email}", "newEmail@gmail.com")
                         .content(objectMapper.writeValueAsString(newPassword))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+        Mockito.verify(doctorService).updatePassword("newEmail@gmail.com",newPassword);
     }
 
     @Test
     public void deleteDoctor_successfulDelete_patientDeleted() throws Exception {
         Doctor doctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         mockMvc.perform(MockMvcRequestBuilders.delete("/doctors/{email}", doctor.getEmail()))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+        Mockito.verify(doctorService).deleteDoctor("newEmail@gmail.com");
     }
 }

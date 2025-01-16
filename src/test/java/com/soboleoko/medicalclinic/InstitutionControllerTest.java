@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -47,8 +48,10 @@ public class InstitutionControllerTest {
     public void assignDoctorToInstitution_successfulPatch_doctorAssigned() throws Exception {
         Institution institution = new Institution(1L,"newName",new HashSet<>());
         Doctor doctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
+        Set<Doctor> doctors = Set.of(doctor);
+        Institution institutionAssignedDoctor = new Institution(1L, "Inst1", doctors);
 
-        Mockito.when(institutionService.assignDoctorToInstitution(doctor.getId(), institution.getId())).thenReturn(institution);
+        Mockito.when(institutionService.assignDoctorToInstitution(doctor.getId(), institution.getId())).thenReturn(institutionAssignedDoctor);
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/institutions/1/assign/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

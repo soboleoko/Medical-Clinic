@@ -112,8 +112,6 @@ public class PatientControllerTest {
     @Test
     public void updatePassword_successfulPatch_passwordUpdated() throws Exception {
         UpdatePasswordDTO newPassword = new UpdatePasswordDTO("newerPassword");
-        Patient patient = new Patient(null, "newEmail@gmail.com", "newPassword", "newCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29), new HashSet<>());
-        Mockito.when(patientService.updatePassword(patient.getEmail(), newPassword)).thenReturn(patient);
         mockMvc.perform(MockMvcRequestBuilders.patch("/patients/{email}", "newEmail@gmail.com")
                         .content(objectMapper.writeValueAsString(newPassword))
                         .contentType(MediaType.APPLICATION_JSON))
