@@ -25,4 +25,12 @@ public class Visit {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
+
+    public Visit(CreateVisitDTO createVisitDTO, Doctor doctor) {
+        Visit visit = new Visit();
+        visit.setDoctor(doctor);
+        visit.setStartDate(createVisitDTO.getStartDate());
+        visit.setEndDate(createVisitDTO.getEndDate());
+
+    }
 }

@@ -6,10 +6,9 @@ import com.soboleoko.medicalclinic.model.VisitDTO;
 import com.soboleoko.medicalclinic.service.VisitService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -19,9 +18,10 @@ public class VisitController {
     private final VisitService visitService;
     private final VisitMapper visitMapper;
 
-    @PostMapping("/{doctorId}")
-    public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO visit, @PathVariable Long doctorId) {
-        return visitMapper.mapToVisitDTO(visitService.createVisit(visit, doctorId));
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping()
+    public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO createVisitDTO) {
+        return visitMapper.mapToVisitDTO(visitService.createVisit((createVisitDTO)));
     }
 
     @PatchMapping("/{visitId}/book")
@@ -32,11 +32,5 @@ public class VisitController {
     @GetMapping("/patients/{patientId}")
     public List<VisitDTO> getPatientVisits(@PathVariable Long patientId) {
         return visitMapper.mapToVisitListDTO(visitService.findPatientVisits(patientId));
-    }
-
-    @GetMapping("/check")
-    public String checkIfAvailable(@RequestParam Long doctorId, @RequestParam LocalDateTime startDate,
-                                   @RequestParam LocalDateTime endDate) {
-        return visitService.checkAvailability(doctorId, startDate, endDate);
     }
 }

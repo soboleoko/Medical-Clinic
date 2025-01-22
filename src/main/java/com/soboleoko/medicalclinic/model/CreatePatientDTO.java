@@ -22,7 +22,6 @@ public class CreatePatientDTO {
     private String firstName;
     @NotBlank(message = "Please provide a last name")
     private String lastName;
-    private String fullName;
     @NotBlank(message = "Please provide a phone number")
     private String phoneNumber;
     @NotNull(message = "Please provide a birthday")
