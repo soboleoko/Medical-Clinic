@@ -1,9 +1,7 @@
 package com.soboleoko.medicalclinic;
 
 import com.soboleoko.medicalclinic.exception.*;
-import com.soboleoko.medicalclinic.model.Doctor;
-import com.soboleoko.medicalclinic.model.Patient;
-import com.soboleoko.medicalclinic.model.Visit;
+import com.soboleoko.medicalclinic.model.*;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
 import com.soboleoko.medicalclinic.repository.PatientRepository;
 import com.soboleoko.medicalclinic.repository.VisitRepository;
@@ -42,17 +40,18 @@ public class VisitServiceTest {
         Patient mappedPatient = new Patient(1L, "newEmail@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
         Doctor mappedDoctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
-        Visit mappedVisit = new Visit(null, LocalDateTime.of(2025, 6, 16, 18, 0), LocalDateTime.of(2025, 6, 16, 18, 30), mappedPatient, mappedDoctor);
+        CreateVisitDTO createVisitDTO = new CreateVisitDTO(LocalDateTime.of(2025, 6, 16, 18, 0), LocalDateTime.of(2025, 6, 16, 18, 30), mappedPatient.getId(), mappedDoctor.getId());
+        Visit visit = new Visit(null,LocalDateTime.of(2025, 6, 16, 18, 0), LocalDateTime.of(2025, 6, 16, 18, 30), mappedPatient, mappedDoctor);
         when(doctorRepository.findById(1L)).thenReturn(Optional.of(mappedDoctor));
         when(patientRepository.findById(1L)).thenReturn(Optional.of(mappedPatient));
-        when(visitRepository.save(mappedVisit)).thenReturn(mappedVisit);
+        when(visitRepository.save(visit)).thenReturn(visit);
         //when
-        Visit createdVisit = visitService.createVisit(mappedVisit, 1L);
+        Visit result = visitService.createVisit(createVisitDTO);
         //then
-        Assertions.assertEquals(LocalDateTime.of(2025, 6, 16, 18, 0), createdVisit.getStartDate());
-        Assertions.assertEquals(LocalDateTime.of(2025, 6, 16, 18, 30), createdVisit.getEndDate());
-        Assertions.assertEquals(mappedPatient, createdVisit.getPatient());
-        Assertions.assertEquals(mappedDoctor, createdVisit.getDoctor());
+        Assertions.assertEquals(LocalDateTime.of(2025, 6, 16, 18, 0), result.getStartDate());
+        Assertions.assertEquals(LocalDateTime.of(2025, 6, 16, 18, 30), result.getEndDate());
+        Assertions.assertEquals(mappedPatient, result.getPatient());
+        Assertions.assertEquals(mappedDoctor, result.getDoctor());
     }
 
     @Test
@@ -60,11 +59,11 @@ public class VisitServiceTest {
         //given
         Patient mappedPatient = new Patient(null, "newEmail@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
-        Visit mappedVisit = new Visit(null, LocalDateTime.of(2025, 6, 16, 18, 0), LocalDateTime.of(2025, 6, 16, 18, 30), mappedPatient, null);
+        CreateVisitDTO mappedVisit = new CreateVisitDTO(LocalDateTime.of(2025, 6, 16, 18, 0), LocalDateTime.of(2025, 6, 16, 18, 30), mappedPatient.getId(), null);
         when(patientRepository.findById(1L)).thenReturn(Optional.of(mappedPatient));
         when(doctorRepository.findById(1L)).thenReturn(Optional.empty());
         //when
-        DoctorNotFoundException result = Assertions.assertThrows(DoctorNotFoundException.class, () -> visitService.createVisit(mappedVisit, null));
+        DoctorNotFoundException result = Assertions.assertThrows(DoctorNotFoundException.class, () -> visitService.createVisit(mappedVisit));
         //then
         Assertions.assertEquals("Doctor does not exist", result.getMessage());
         Assertions.assertEquals(HttpStatus.NOT_FOUND, result.getHttpStatus());
@@ -76,11 +75,11 @@ public class VisitServiceTest {
         Doctor mappedDoctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         Patient mappedPatient = new Patient(1L, "asd@gmail.com", "newPassword", "newIdCardNo", "newFirstName", "newLastName", "newPhoneNumber", LocalDate.of(1999, 12, 29),
                 new HashSet<>());
-        Visit mappedVisit = new Visit(null, LocalDateTime.of(2025, 6, 16, 18, 0), LocalDateTime.of(2025, 6, 16, 18, 30), mappedPatient, mappedDoctor);
+        CreateVisitDTO mappedVisit = new CreateVisitDTO(LocalDateTime.of(2025, 6, 16, 18, 0), LocalDateTime.of(2025, 6, 16, 18, 30), mappedPatient.getId(), mappedDoctor.getId());
         when(patientRepository.findById(1L)).thenReturn(Optional.empty());
         when(doctorRepository.findById(1L)).thenReturn(Optional.of(mappedDoctor));
         //when
-        PatientNotFoundException result = Assertions.assertThrows(PatientNotFoundException.class, () -> visitService.createVisit(mappedVisit, 1L));
+        PatientNotFoundException result = Assertions.assertThrows(PatientNotFoundException.class, () -> visitService.createVisit(mappedVisit));
         //then
         Assertions.assertEquals("Patient does not exist", result.getMessage());
         Assertions.assertEquals(HttpStatus.NOT_FOUND, result.getHttpStatus());

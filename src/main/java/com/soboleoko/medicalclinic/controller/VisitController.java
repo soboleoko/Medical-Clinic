@@ -19,9 +19,9 @@ public class VisitController {
     private final VisitMapper visitMapper;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{doctorId}")
-    public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO visit, @PathVariable Long doctorId) {
-        return visitMapper.mapToVisitDTO(visitService.createVisit(visitMapper.mapToVisit(visit), doctorId));
+    @PostMapping()
+    public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO createVisitDTO) {
+        return visitMapper.mapToVisitDTO(visitService.createVisit((createVisitDTO)));
     }
 
     @PatchMapping("/{visitId}/book")

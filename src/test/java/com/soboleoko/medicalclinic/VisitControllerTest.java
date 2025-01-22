@@ -40,7 +40,7 @@
 //        CreateVisitDTO createVisitDTO = new CreateVisitDTO(LocalDateTime.of(2030, 1, 1, 15, 30), LocalDateTime.of(2030, 1, 1, 16, 0), patient.getId(), doctor.getId());
 //        Visit visit = new Visit(null, LocalDateTime.of(2030, 1, 1, 15, 30), LocalDateTime.of(2030, 1, 1, 16, 0), patient, doctor);
 //
-//        when(visitService.createVisit(visit, doctor.getId())).thenReturn(visit);
+//        when(visitService.createVisit(createVisitDTO, doctor.getId())).thenReturn(visit);
 //
 //        mockMvc.perform(MockMvcRequestBuilders.post("/visits/1")
 //                        .content(objectMapper.writeValueAsString(createVisitDTO))

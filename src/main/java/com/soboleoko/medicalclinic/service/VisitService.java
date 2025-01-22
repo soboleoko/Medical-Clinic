@@ -1,6 +1,7 @@
 package com.soboleoko.medicalclinic.service;
 
 import com.soboleoko.medicalclinic.exception.*;
+import com.soboleoko.medicalclinic.model.CreateVisitDTO;
 import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.Patient;
 import com.soboleoko.medicalclinic.model.Visit;
@@ -23,19 +24,11 @@ public class VisitService {
     private final DoctorRepository doctorRepository;
 
     @Transactional
-    public Visit createVisit(Visit visit, Long doctorId) {
-        Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.NOT_FOUND));
-        visit.setDoctor(doctor);
-        if (visit.getPatient() != null) {
-            Patient patient = patientRepository.findById(visit.getPatient().getId())
-                    .orElseThrow(() -> new PatientNotFoundException(HttpStatus.NOT_FOUND, "Patient does not exist"));
-            visit.setPatient(patient);
-        } else {
-            visit.setPatient(null);
-        }
-        checkAvailability(visit,doctor);
-        return visitRepository.save(visit);
+    public Visit createVisit(CreateVisitDTO visit) {
+        Doctor doctor = doctorRepository.findById(visit.getDoctorId()).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.BAD_REQUEST));
+        checkAvailability(visit, doctor);
+        Visit createdVisit = new Visit(visit,doctor);
+        return visitRepository.save(createdVisit);
     }
 
     @Transactional
@@ -58,11 +51,12 @@ public class VisitService {
         return visitRepository.findByPatientId(patientId);
     }
 
-    public void checkAvailability(Visit visit, Doctor doctor) {
+    public void checkAvailability(CreateVisitDTO visit, Doctor doctor) {
         validateTime(visit.getStartDate());
         validateTime(visit.getEndDate());
         List<Visit> overlappingVisits = visitRepository.findOverlappingVisits(doctor.getId(), visit.getStartDate(), visit.getEndDate());
         if (!overlappingVisits.isEmpty()) {
+
             throw new VisitNotAvailableException("Provided date is already taken", HttpStatus.CONFLICT);
         }
     }
