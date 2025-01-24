@@ -5,10 +5,12 @@ import com.soboleoko.medicalclinic.model.*;
 import com.soboleoko.medicalclinic.service.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RequestMapping("/doctors")
 @RestController
@@ -18,8 +20,8 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @GetMapping
-    public List<DoctorDTO> getDoctors() {
-        return doctorMapper.mapToDoctorDTOList(doctorService.getDoctors());
+    public List<DoctorDTO> getDoctors(Pageable pageable) {
+        return doctorMapper.mapToDoctorDTOList(doctorService.getDoctors(pageable));
     }
 
     @GetMapping("/{email}")

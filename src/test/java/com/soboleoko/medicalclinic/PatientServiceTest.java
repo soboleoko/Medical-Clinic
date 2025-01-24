@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -75,7 +76,7 @@ public class PatientServiceTest {
                 new HashSet<>());
         when(patientRepository.findAll()).thenReturn(List.of(mappedPatient, mappedPatient1));
         //when
-        List<Patient> patients = patientService.getPatients();
+        List<Patient> patients = patientService.getPatients(any());
         //then
         Assertions.assertEquals(2, patients.size());
     }

@@ -51,7 +51,7 @@ public class DoctorControllerTest {
         Doctor doctor = new Doctor(1L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         Doctor anotherDoctor = new Doctor(2L, "newFirstName", "newLastName", "newSpecialization", "newEmail@gmail.com", "newPassword", new HashSet<>(), new HashSet<>());
         List<Doctor> doctors = List.of(doctor, anotherDoctor);
-        Mockito.when(doctorService.getDoctors()).thenReturn(doctors);
+        Mockito.when(doctorService.getDoctors(any())).thenReturn(doctors);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/doctors"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

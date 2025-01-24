@@ -7,10 +7,12 @@ import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +27,8 @@ public class DoctorService {
         return doctorRepository.save(doctor);
     }
 
-    public List<Doctor> getDoctors() {
-        return doctorRepository.findAll();
+    public List<Doctor> getDoctors(Pageable pageable) {
+        return doctorRepository.findAll(pageable).getContent();
     }
 
     @Transactional
