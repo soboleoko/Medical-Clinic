@@ -1,12 +1,12 @@
 package com.soboleoko.medicalclinic.controller;
 
+import com.soboleoko.medicalclinic.exception.ErrorMessage;
 import com.soboleoko.medicalclinic.mapper.InstitutionMapper;
 import com.soboleoko.medicalclinic.model.CreateInstitutionDTO;
 import com.soboleoko.medicalclinic.model.InstitutionDTO;
 import com.soboleoko.medicalclinic.service.InstitutionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,15 +29,12 @@ public class InstitutionController {
             @ApiResponse(responseCode = "200", description = "Institution created",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = InstitutionDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Institution already exists"),
+            @ApiResponse(responseCode = "400", description = "Institution already exists",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Unknown error")
     })
-    public InstitutionDTO addInstitution(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Patient to create",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CreateInstitutionDTO.class),
-                    examples = @ExampleObject(value = "{ \"name\" : \"Example Name\" }"))
-    )@RequestBody CreateInstitutionDTO institution) {
+    public InstitutionDTO addInstitution(@Valid @RequestBody CreateInstitutionDTO institution) {
         return institutionMapper.mapToInstitutionDTO(institutionService.addInstitution(institutionMapper.mapToInstitution(institution)));
     }
 
@@ -47,8 +44,12 @@ public class InstitutionController {
             @ApiResponse(responseCode = "200", description = "Doctor assigned to institution",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = InstitutionDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Doctor or institution does not exist"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Doctor or institution does not exist",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
     public InstitutionDTO assignDoctorToInstitution(@PathVariable Long doctorId, @PathVariable Long institutionId) {
         return institutionMapper.mapToInstitutionDTO(institutionService.assignDoctorToInstitution(doctorId, institutionId));

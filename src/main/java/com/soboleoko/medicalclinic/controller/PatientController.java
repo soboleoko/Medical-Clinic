@@ -1,5 +1,6 @@
 package com.soboleoko.medicalclinic.controller;
 
+import com.soboleoko.medicalclinic.exception.ErrorMessage;
 import com.soboleoko.medicalclinic.mapper.PatientMapper;
 import com.soboleoko.medicalclinic.model.CreatePatientDTO;
 import com.soboleoko.medicalclinic.model.UpdatePasswordDTO;
@@ -7,7 +8,6 @@ import com.soboleoko.medicalclinic.service.PatientService;
 import com.soboleoko.medicalclinic.model.PatientDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,7 +32,9 @@ public class PatientController {
             @ApiResponse(responseCode = "200", description = "Patients returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = PatientDTO.class))}),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
     public List<PatientDTO> getAllPatients(Pageable pageable) {
         return patientMapper.mapToPatientDTOList(patientService.getPatients(pageable));
@@ -44,8 +46,12 @@ public class PatientController {
             @ApiResponse(responseCode = "200", description = "Patient returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = PatientDTO.class))}),
-            @ApiResponse(responseCode = "400", description = "Patient does not exist"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Patient does not exist",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
 
     })
     public PatientDTO getPatientByEmail(@PathVariable String email) {
@@ -59,18 +65,14 @@ public class PatientController {
             @ApiResponse(responseCode = "200", description = "Patient created",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PatientDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Patient already exists"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Patient already exists",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
-    private PatientDTO addPatient(@io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Patient to create",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CreatePatientDTO.class),
-                    examples = @ExampleObject(value = "{ \"firstName\" : \"Example First Name\", " +
-                            "\"lastName\" : \"Example Last Name\", \"idCardNo\" : \"Example Card Number\"" +
-                            " \"email\" : \"Example Email\", \"password\" : \"Example Password\"," +
-                            " \"phoneNumber\" : \"Example Phone Number\",  \"birthday\" : \"Example Birthday\" }"))
-    ) @RequestBody @Valid CreatePatientDTO patient) {
+    private PatientDTO addPatient(@RequestBody @Valid CreatePatientDTO patient) {
         return patientMapper.mapToPatientDTO(patientService.addPatient(patientMapper.mapToPatient(patient)));
     }
 
@@ -78,8 +80,12 @@ public class PatientController {
     @Operation(summary = "Remove patient from database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Patient removed"),
-            @ApiResponse(responseCode = "400", description = "Patient does not exist"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Patient does not exist",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
     public void deletePatientByEmail(@PathVariable String email) {
         patientService.deletePatient(email);
@@ -91,18 +97,14 @@ public class PatientController {
             @ApiResponse(responseCode = "204", description = "Patient data updated",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PatientDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Patient does not exist"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Patient does not exist",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public PatientDTO updatePatient(@PathVariable String email, @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Patient to update",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CreatePatientDTO.class),
-                    examples = @ExampleObject(value = "{ \"firstName\" : \"Example First Name\", " +
-                            "\"lastName\" : \"Example Last Name\", \"idCardNo\" : \"Example Card Number\"" +
-                            " \"email\" : \"Example Email\", \"password\" : \"Example Password\"," +
-                            " \"phoneNumber\" : \"Example Phone Number\",  \"birthday\" : \"Example Birthday\" }"))
-    ) @RequestBody @Valid CreatePatientDTO newPatientData) {
+    public PatientDTO updatePatient(@PathVariable String email, @RequestBody @Valid CreatePatientDTO newPatientData) {
         return patientMapper.mapToPatientDTO(patientService.updatePatient(email, patientMapper.mapToPatient(newPatientData)));
     }
 
@@ -110,15 +112,14 @@ public class PatientController {
     @Operation(summary = "Update patients' password in database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Patient password updated"),
-            @ApiResponse(responseCode = "400", description = "Patient does not exist"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Patient does not exist",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public void updatePassword(@PathVariable String email, @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Patient to create",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = UpdatePasswordDTO.class),
-                    examples = @ExampleObject(value = "{ \"password\" : \"Example Password\" }"))
-    ) @RequestBody @Valid UpdatePasswordDTO password) {
+    public void updatePassword(@PathVariable String email, @RequestBody @Valid UpdatePasswordDTO password) {
         patientService.updatePassword(email, password);
     }
 }

@@ -1,12 +1,12 @@
 package com.soboleoko.medicalclinic.controller;
 
+import com.soboleoko.medicalclinic.exception.ErrorMessage;
 import com.soboleoko.medicalclinic.mapper.VisitMapper;
 import com.soboleoko.medicalclinic.model.CreateVisitDTO;
 import com.soboleoko.medicalclinic.model.VisitDTO;
 import com.soboleoko.medicalclinic.service.VisitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,16 +31,14 @@ public class VisitController {
             @ApiResponse(responseCode = "200", description = "Visit created",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = VisitDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Doctor or institution does not exist"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Doctor or institution does not exist",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public VisitDTO createVisit(@io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Patient to create",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CreateVisitDTO.class),
-                    examples = @ExampleObject(value = "{ \"startDate\" : \"Example Start Date\", \"endDate\" : \"Example End Date\", " +
-                            "\"doctorId\" : \"Example Doctor ID\", \"institutionID\" : \"Example Institution ID\" }"))
-    ) @RequestBody @Valid CreateVisitDTO createVisitDTO) {
+    public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO createVisitDTO) {
         return visitMapper.mapToVisitDTO(visitService.createVisit((createVisitDTO)));
     }
 
@@ -50,8 +48,12 @@ public class VisitController {
             @ApiResponse(responseCode = "200", description = "Visit booked",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = VisitDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Provided visit is already booked"),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "400", description = "Provided visit is already booked",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
     public VisitDTO bookVisit(@PathVariable Long visitId, @RequestParam Long patientId) {
         return visitMapper.mapToVisitDTO(visitService.bookVisit(visitId, patientId));
@@ -63,7 +65,9 @@ public class VisitController {
             @ApiResponse(responseCode = "200", description = "Patients' visits returned",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = VisitDTO.class))),
-            @ApiResponse(responseCode = "500", description = "Unknown error")
+            @ApiResponse(responseCode = "500", description = "Unknown error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)))
     })
     public List<VisitDTO> getPatientVisits(@PathVariable Long patientId) {
         return visitMapper.mapToVisitListDTO(visitService.findPatientVisits(patientId));
