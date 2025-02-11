@@ -23,10 +23,10 @@ public class VisitService {
     private final InstitutionRepository institutionRepository;
 
     @Transactional
-    public Visit createVisit(CreateVisitDTO visit) {
-        Doctor doctor = doctorRepository.findById(visit.getDoctorId())
+    public Visit createVisit(CreateVisitDTO visit, Long doctorId, Long institutionId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.BAD_REQUEST));
-        Institution institution = institutionRepository.findById(visit.getInstitutionId())
+        Institution institution = institutionRepository.findById(institutionId)
                 .orElseThrow(() -> new InstitutionNotFoundException("Institution does not exist", HttpStatus.BAD_REQUEST));
         checkAvailability(visit, doctor);
         Visit createdVisit = Visit.of(visit, doctor, institution);

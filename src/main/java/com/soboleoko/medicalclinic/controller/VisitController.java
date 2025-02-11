@@ -25,7 +25,7 @@ public class VisitController {
     private final VisitMapper visitMapper;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping()
+    @PostMapping("institutions/{institutionId}/doctors/{doctorId}")
     @Operation(summary = "Create visit in database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Visit created",
@@ -38,8 +38,8 @@ public class VisitController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO createVisitDTO) {
-        return visitMapper.mapToVisitDTO(visitService.createVisit((createVisitDTO)));
+    public VisitDTO createVisit(@RequestBody @Valid CreateVisitDTO createVisitDTO, @PathVariable Long doctorId, @PathVariable Long institutionId) {
+        return visitMapper.mapToVisitDTO(visitService.createVisit(createVisitDTO, doctorId, institutionId));
     }
 
     @PatchMapping("/{visitId}/book")

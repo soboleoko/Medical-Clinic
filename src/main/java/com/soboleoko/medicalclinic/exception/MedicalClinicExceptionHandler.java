@@ -27,6 +27,7 @@ public class MedicalClinicExceptionHandler {
         return new ResponseEntity<>(new ErrorMessage("Unknown message"), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
     @ExceptionHandler({PatientAlreadyExistsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorMessage> handlePatientAlreadyExists(PatientAlreadyExistsException exception) {

@@ -26,6 +26,7 @@ public class Visit {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
     @ManyToOne
+    @JoinColumn(name = "institution_id")
     private Institution institution;
 
     public static Visit of(CreateVisitDTO createVisitDTO, Doctor doctor, Institution institution) {
