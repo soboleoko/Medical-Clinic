@@ -11,10 +11,11 @@ import java.util.Set;
 @Data
 public class DoctorDTO {
 
+    private Long id;
     private String firstName;
     private String lastName;
     private String specialization;
     private String email;
-    private Set<Institution> institutions;
-    private Set<Visit> visits;
+    private Set<InstitutionDTO> institutions;
+    private Set<VisitDTO> visits;
 }
