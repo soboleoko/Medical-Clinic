@@ -1,11 +1,9 @@
 package com.soboleoko.medicalclinic.service;
 
 import com.soboleoko.medicalclinic.exception.*;
-import com.soboleoko.medicalclinic.model.CreateVisitDTO;
-import com.soboleoko.medicalclinic.model.Doctor;
-import com.soboleoko.medicalclinic.model.Patient;
-import com.soboleoko.medicalclinic.model.Visit;
+import com.soboleoko.medicalclinic.model.*;
 import com.soboleoko.medicalclinic.repository.DoctorRepository;
+import com.soboleoko.medicalclinic.repository.InstitutionRepository;
 import com.soboleoko.medicalclinic.repository.PatientRepository;
 import com.soboleoko.medicalclinic.repository.VisitRepository;
 import jakarta.transaction.Transactional;
@@ -22,12 +20,16 @@ public class VisitService {
     private final VisitRepository visitRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
+    private final InstitutionRepository institutionRepository;
 
     @Transactional
-    public Visit createVisit(CreateVisitDTO visit) {
-        Doctor doctor = doctorRepository.findById(visit.getDoctorId()).orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.BAD_REQUEST));
+    public Visit createVisit(CreateVisitDTO visit, Long doctorId, Long institutionId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor does not exist", HttpStatus.BAD_REQUEST));
+        Institution institution = institutionRepository.findById(institutionId)
+                .orElseThrow(() -> new InstitutionNotFoundException("Institution does not exist", HttpStatus.BAD_REQUEST));
         checkAvailability(visit, doctor);
-        Visit createdVisit = new Visit(visit,doctor);
+        Visit createdVisit = Visit.of(visit, doctor, institution);
         return visitRepository.save(createdVisit);
     }
 

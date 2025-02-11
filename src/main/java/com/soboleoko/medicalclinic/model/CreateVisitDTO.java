@@ -18,7 +18,4 @@ public class CreateVisitDTO {
     @Future(message = "Visit in past is not allowed")
     @NotNull(message = "Please provide a correct date and time")
     private LocalDateTime endDate;
-    private Long patientId;
-    @NotNull
-    private Long doctorId;
 }
