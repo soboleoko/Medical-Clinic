@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -22,4 +23,5 @@ public class CreateDoctorDTO {
     private String email;
     @NotBlank(message = "Please provide a password")
     private String password;
+    private String institutionName;
 }

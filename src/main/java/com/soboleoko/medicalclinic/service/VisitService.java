@@ -30,6 +30,7 @@ public class VisitService {
                 .orElseThrow(() -> new InstitutionNotFoundException("Institution does not exist", HttpStatus.BAD_REQUEST));
         checkAvailability(visit, doctor);
         Visit createdVisit = Visit.of(visit, doctor, institution);
+        doctor.getVisits().add(createdVisit);
         return visitRepository.save(createdVisit);
     }
 

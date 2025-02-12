@@ -111,12 +111,23 @@ public class DoctorController {
             @ApiResponse(responseCode = "204", description = "Doctor password updated"),
             @ApiResponse(responseCode = "400", description = "Doctor does not exist",
                     content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ErrorMessage.class))),
+                            schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Unknown error",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)))
     })
     public void updatePassword(@PathVariable String email, @RequestBody @Valid UpdatePasswordDTO password) {
         doctorService.updatePassword(email, password);
+    }
+
+    @PostMapping("/institutions/{institutionId}")
+    public DoctorDTO createDoctorWithInstitution(@RequestBody CreateDoctorDTO createDoctorDTO) {
+        return doctorMapper.mapToDoctorDTO(doctorService.createDoctorWithInstitution(createDoctorDTO));
+    }
+
+    @PatchMapping("/{doctorId}/visits/{visitId}")
+    public DoctorDTO updateDoctorAndVisitDate(@RequestBody UpdateDoctorAndVisitDateDTO updateDoctorAndVisitDateDTO, @PathVariable Long doctorId,
+                                              @PathVariable Long visitId) {
+        return doctorMapper.mapToDoctorDTO(doctorService.updateDoctorAndVisitDate(updateDoctorAndVisitDateDTO, doctorId, visitId));
     }
 }
