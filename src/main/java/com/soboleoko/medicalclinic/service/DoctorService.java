@@ -8,11 +8,11 @@ import com.soboleoko.medicalclinic.repository.DoctorRepository;
 import com.soboleoko.medicalclinic.repository.VisitRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 
 @Service
@@ -28,8 +28,8 @@ public class DoctorService {
         return doctorRepository.save(doctor);
     }
 
-    public List<Doctor> getDoctors(Pageable pageable) {
-        return doctorRepository.findAll(pageable).getContent();
+    public Page<Doctor> getDoctors(Pageable pageable) {
+        return doctorRepository.findAllWithVisits(pageable);
     }
 
     @Transactional

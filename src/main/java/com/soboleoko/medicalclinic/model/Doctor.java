@@ -7,10 +7,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "doctor")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@NamedEntityGraph(
+        name = "doctor-graph-with-visits",
+        attributeNodes = {
+                @NamedAttributeNode("visits")
+        }
+)
+
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

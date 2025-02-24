@@ -4,8 +4,10 @@ import com.soboleoko.medicalclinic.model.CreateDoctorDTO;
 import com.soboleoko.medicalclinic.model.Doctor;
 import com.soboleoko.medicalclinic.model.DoctorDTO;
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface DoctorMapper {
@@ -13,5 +15,5 @@ public interface DoctorMapper {
 
     DoctorDTO mapToDoctorDTO(Doctor doctor);
 
-    List<DoctorDTO> mapToDoctorDTOList(List<Doctor> doctors);
+    List<DoctorDTO> mapToDoctorDTOList(Page<Doctor> doctors);
 }
