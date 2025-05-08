@@ -27,7 +27,6 @@ databaseChangeLog:
                   name: patient_id
                   type: BIGINT
                   constraints:
-                    nullable: false
               - column:
                   name: doctor_id
                   type: BIGINT

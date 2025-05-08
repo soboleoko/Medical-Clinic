@@ -24,7 +24,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: id_card-number
+                  name: id_card_number
                   type: varchar(100)
                   constraints:
                     nullable: false
